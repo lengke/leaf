@@ -14,7 +14,8 @@
 
     {{ form.csrf_token }}
     <p>{{ form.name.label }} {{ form.name }}</p>
-    <!--{{ form.status }}-->
+    {{ form.status.label }}
+    {{ form.status }}
     <p>{{ form.submit }}</p>
 
 </form>
