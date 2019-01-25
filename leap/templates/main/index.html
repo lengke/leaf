@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
+    <style>
+        .tit {
+            color:skyblue;
+        }
+
+    </style>
 </head>
 <body>
 
-<h2>全站首页</h2>
-
-<h4>登录/注册</h4>
-
-
+<h1 class="tit">欢迎来到LEAP！</h1>
+<h4 class="tit">Light Easy Agile Project management</h4>
+<hr>
+<a href="">登录</a>
+<br>
+<a href="">注册</a>
+<br>
+<hr>
+<a href="{{ url_for('.all_projects')}}">查看所有项目</a>
+<br>
+<a href="{{ url_for('.create_project')}}">新建项目</a>   
 
 </body>
 </html>
