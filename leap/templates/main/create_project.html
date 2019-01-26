@@ -10,12 +10,17 @@
 
 <h4>请在下方填写项目信息</h4>
 
-<form method="post" action="">
+{% for message in form.errors %}
+    {{ message }}
+{% endfor %}
 
+
+<form method="post" action="">
     {{ form.csrf_token }}
     <p>{{ form.name.label }} {{ form.name }}</p>
-    {{ form.status.label }}
-    {{ form.status }}
+    <p>{{ form.description.label }} {{ form.description }}</p>
+    <p>{{ form.start_time.label }} {{ form.start_time }}</p>
+    <p>{{ form.end_time.label }} {{ form.end_time }}</p>
     <p>{{ form.submit }}</p>
 
 </form>

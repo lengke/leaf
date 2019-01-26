@@ -7,6 +7,7 @@ from leap.models import Project
 main = Blueprint(__name__, "main")
 
 
+# 网站首页
 @main.route("/", methods=["GET", "POST"])
 def index():
     # db.drop_all()
@@ -14,23 +15,32 @@ def index():
     return render_template("main/index.html")
 
 
+# 显示所有项目列表
 @main.route("/allprojects", methods=["GET", "POST"])
-def all_projects():
+def show_all_projects():
     projects = Project.query.all()
 
-    return render_template("main/all_projects.html", projects=projects)
+    return render_template("main/show_all_projects.html", projects=projects)
 
 
+# 创建新项目
 @main.route("/create", methods=["GET", "POST"])
 def create_project():
     form = ProjectForm()
     if form.validate_on_submit():
         name = form.name.data
-        status = form.status.data
-        new_project = Project(name=name, status=status)
+        description = form.description.data
+        start_time = form.start_time.data
+        end_time = form.end_time.data
+        new_project = Project(
+            name=name,
+            description=description,
+            start_time=start_time,
+            end_time=end_time
+        )
         db.session.add(new_project)
         db.session.commit()
-        return redirect(url_for(".all_projects"))
+        return redirect(url_for(".show_all_projects"))
     return render_template("main/create_project.html", form=form)
 
 
