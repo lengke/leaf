@@ -15,9 +15,9 @@
 <h1 class="tit">欢迎来到LEAP！</h1>
 <h4 class="tit">Light Easy Agile Project management</h4>
 <hr>
-<a href="">登录</a>
+<a href="{{ url_for('auth.login') }}">登录</a>
 <br>
-<a href="">注册</a>
+<a href="{{ url_for('auth.register') }}">注册</a>
 <br>
 <hr>
 <a href="{{ url_for('.show_all_projects')}}">查看所有项目</a>

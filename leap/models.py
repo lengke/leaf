@@ -1,5 +1,6 @@
 from leap.ext import db
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 #User和Project的多对多关系中间表
@@ -18,8 +19,8 @@ class User(db.Model):
     name = db.Column(db.String(40), nullable=False)
     mobile = db.Column(db.Integer, unique=True)
     email = db.Column(db.String(64), unique=True)
-    department = db.Column(db.String(40))
-    post = db.Column(db.String(40))
+    department = db.Column(db.String(40), nullable=True)
+    post = db.Column(db.String(40), nullable=True)
     signup_time = db.Column(db.DateTime, default=datetime.utcnow)
     password_hash = db.Column(db.String(128))
 
@@ -43,6 +44,14 @@ class User(db.Model):
         "Project",
         secondary=user_project_table,
         back_populates="its_member_users")
+
+    # 存储用户密码hash的方法
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # 校验用户密码的方法
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class Project(db.Model):

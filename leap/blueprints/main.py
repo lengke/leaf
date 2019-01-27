@@ -4,7 +4,7 @@ from leap.ext import db
 from leap.models import Project
 
 
-main = Blueprint(__name__, "main")
+main = Blueprint("main", __name__)
 
 
 # 网站首页
