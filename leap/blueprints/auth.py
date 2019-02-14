@@ -3,7 +3,6 @@ from leap.forms import RegisterForm, LoginForm
 from leap.ext import db
 from leap.models import User
 
-
 auth = Blueprint("auth", __name__)
 
 
@@ -11,12 +10,20 @@ auth = Blueprint("auth", __name__)
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
+    if form.validate_on_submit():
+
+        name = form.name.data
+        mobile = form.mobile.data
+        email = StringField("公司邮箱", validators=[DataRequired()])
+        department = StringField("所属部门", validators=[DataRequired()])
+        post = StringField("职位名称", validators=[DataRequired()])
+        password
+
     return render_template("auth/register.html", form=form)
 
 
 # 用户登录
 @auth.route("/login", methods=["GET", "POST"])
 def login():
-    return "用户登录"
-
-
+    form = LoginForm()
+    return render_template("auth/login.html", form=form)

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户登录</title>
+</head>
+<body>
+    <h2>用户登录</h2>
+    <br>    
+    {% for message in form.errors %}
+        {{ message }}
+    {% endfor %}
+    <br>
+    <form method="post" action="">
+        {{ form.csrf_token }}
+        <p>{{ form.email.label }} {{ form.email }}</p>
+        <p>{{ form.password.label }} {{ form.password }}</p>
+        <p>{{ form.submit }}</p>
+    </form>
+
+
+</body>
+</html>

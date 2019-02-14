@@ -24,6 +24,7 @@ class RegisterForm(FlaskForm):
     submit = SubmitField("提交")
     
 
+
 # 用户登录的表单
 class LoginForm(FlaskForm):
     email = StringField("输入公司邮箱", validators=[DataRequired()])
