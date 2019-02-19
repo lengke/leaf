@@ -12,9 +12,17 @@
 </head>
 <body>
 
-<h1 class="tit">欢迎来到LEAP！</h1>
-<h4 class="tit">Light Easy Agile Project management</h4>
+<h1 class="tit">欢迎来到LEAF！</h1>
+<h4 class="tit">A Light Easy Agile File Management System</h4>
+<h4 class="tit">LEAF是一个轻量、简单、敏捷的项目文档管理系统</h4>
 <hr>
+{% if current_user.is_authenticated %}
+您已登录
+{% else %}
+您还未登录
+{% endif %}
+
+<br>
 <a href="{{ url_for('auth.login') }}">登录</a>
 <br>
 <a href="{{ url_for('auth.register') }}">注册</a>

@@ -9,14 +9,15 @@
 <body>
     <h2>用户登录</h2>
     <br>    
-    {% for message in form.errors %}
+    {% for message in form.mobile.errors %}
         {{ message }}
     {% endfor %}
     <br>
     <form method="post" action="">
         {{ form.csrf_token }}
-        <p>{{ form.email.label }} {{ form.email }}</p>
+        <p>{{ form.mobile.label }} {{ form.mobile }}</p>
         <p>{{ form.password.label }} {{ form.password }}</p>
+        <p>{{ form.remember.label }} {{ form.remember }}</p>
         <p>{{ form.submit }}</p>
     </form>
 

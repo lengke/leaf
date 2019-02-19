@@ -10,21 +10,19 @@
     
     <h2>注册用户</h2>
 
-    <h4>加*号的是必填项</h4>
-    
     {% for message in form.errors %}
         {{ message }}
     {% endfor %}
     
     <form method="post" action="">
         {{ form.csrf_token }}
-        <p>*{{ form.name.label }} {{ form.name }}</p>
-        <p>*{{ form.mobile.label }} {{ form.mobile }}</p>
-        <p>*{{ form.email.label }} {{ form.email }}</p>
+        <p>{{ form.name.label }} {{ form.name }}</p>
+        <p>{{ form.mobile.label }} {{ form.mobile }}</p>
+        <p>{{ form.email.label }} {{ form.email }}</p>
         <p>{{ form.department.label }} {{ form.department }}</p>
         <p>{{ form.post.label }} {{ form.post }}</p>
-        <p>*{{ form.password.label }} {{ form.password }}</p>
-        <p>*{{ form.password2.label }} {{ form.password2 }}</p>
+        <p>{{ form.password.label }} {{ form.password }}</p>
+        <p>{{ form.password2.label }} {{ form.password2 }}</p>
         <p>{{ form.submit }}</p>
     </form>
 

@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, PasswordField, IntegerField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
+from leap.models import User
 
 
 # 创建项目的表单
@@ -14,24 +15,36 @@ class ProjectForm(FlaskForm):
 
 # 新用户注册的表单
 class RegisterForm(FlaskForm):
-    name = StringField("真实姓名", validators=[DataRequired()])
-    mobile = IntegerField("手机号", validators=[DataRequired()])
-    email = StringField("公司邮箱", validators=[DataRequired()])
+    name = StringField("真实姓名", validators=[DataRequired(), Length(1,30)])
+    # 将以手机号作为用户身份的唯一标识！
+    mobile = StringField("手机号", validators=[DataRequired(), Length(1,15)])
+    email = StringField("公司邮箱", validators=[DataRequired(), Email(), Length(1,254)])
     department = StringField("所属部门", validators=[DataRequired()])
     post = StringField("职位名称", validators=[DataRequired()])
-    password = PasswordField("输入密码", validators=[DataRequired()])
-    password2 = PasswordField("确认密码", validators=[DataRequired(), EqualTo(password)])
+    password = PasswordField("输入密码", validators=[DataRequired(), Length(6,128), EqualTo('password2')])
+    password2 = PasswordField("确认密码", validators=[DataRequired()])
     submit = SubmitField("提交")
-    
+
+    # 防止email重复
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data.lower()).first():
+            raise ValidationError('该邮箱地址已被注册')
+
+    # 防止手机号重复
+    def validate_mobile(self, field):
+        if User.query.filter_by(mobile=field.data).first():
+            raise ValidationError('该手机号已被注册')
 
 
 # 用户登录的表单
 class LoginForm(FlaskForm):
-    email = StringField("输入公司邮箱", validators=[DataRequired()])
+    mobile = StringField("输入手机号", validators=[DataRequired()])
     password = PasswordField("输入密码", validators=[DataRequired()])
+    remember = BooleanField("记住我", default=True)
     submit = SubmitField("提交")
 
-
-
+    def validate_mobile(self, field):
+        if not User.query.filter_by(mobile=field.data).first():
+            raise ValidationError("手机号未注册")
 
 

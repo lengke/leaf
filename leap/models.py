@@ -1,7 +1,7 @@
 from leap.ext import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import UserMixin
 
 #User和Project的多对多关系中间表
 user_project_table = db.Table(
@@ -11,16 +11,16 @@ user_project_table = db.Table(
 )
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
 
     # 以下为数据字段：
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), nullable=False)
-    mobile = db.Column(db.Integer, unique=True)
+    # 将以手机号作为用户身份的唯一标识！
+    mobile = db.Column(db.String(15), unique=True)
     email = db.Column(db.String(64), unique=True)
-    department = db.Column(db.String(40), nullable=True)
-    post = db.Column(db.String(40), nullable=True)
+    department = db.Column(db.String(40))
+    post = db.Column(db.String(40))
     signup_time = db.Column(db.DateTime, default=datetime.utcnow)
     password_hash = db.Column(db.String(128))
 
