@@ -2,7 +2,7 @@ from flask import Flask
 from leap.settings import config_list
 from leap.blueprints.main import main
 from leap.blueprints.auth import auth
-from leap.ext import db, login_manager, mail, bootstrap
+from leap.ext import db, login_manager, mail, bootstrap, moment
 
 
 def create_app(config_name=None):
@@ -28,6 +28,7 @@ def register_exts(app):
     login_manager.init_app(app)
     bootstrap.init_app(app)
     mail.init_app(app)
+    moment.init_app(app)
 
 
 

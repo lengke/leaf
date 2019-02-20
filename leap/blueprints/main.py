@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, url_for, redirect
 from leap.forms import ProjectForm
 from leap.ext import db
 from leap.models import Project
+from flask_login import login_required
 
 
 main = Blueprint("main", __name__)
@@ -17,6 +18,7 @@ def index():
 
 # 显示所有项目列表
 @main.route("/allprojects", methods=["GET", "POST"])
+@login_required
 def show_all_projects():
     projects = Project.query.all()
 
@@ -25,6 +27,7 @@ def show_all_projects():
 
 # 创建新项目
 @main.route("/create", methods=["GET", "POST"])
+@login_required
 def create_project():
     form = ProjectForm()
     if form.validate_on_submit():

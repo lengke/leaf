@@ -1,36 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-    <style>
-        .tit {
-            color:skyblue;
-        }
+{% extends 'base.html' %}
 
-    </style>
-</head>
-<body>
+{% block title %}首页{% endblock %}
 
-<h1 class="tit">欢迎来到LEAF！</h1>
-<h4 class="tit">A Light Easy Agile File Management System</h4>
-<h4 class="tit">LEAF是一个轻量、简单、敏捷的项目文档管理系统</h4>
+{% block content %}
+
+    <h1 class="text-success">欢迎来到LEAF！</h1>
+    <h6 class="text-secondary">为团队协作而生的项目文档管理系统</h6>
+    <h6 class="text-secondary">60秒上手，0遗漏通知，100%好用</h6>
+
 <hr>
-{% if current_user.is_authenticated %}
-您已登录
-{% else %}
-您还未登录
-{% endif %}
 
-<br>
-<a href="{{ url_for('auth.login') }}">登录</a>
-<br>
-<a href="{{ url_for('auth.register') }}">注册</a>
-<br>
+<p>现有项目共计X个，进行中X个，已结束X个。现有文件共计X个。</p>
+
 <hr>
-<a href="{{ url_for('.show_all_projects')}}">查看所有项目</a>
-<br>
-<a href="{{ url_for('.create_project')}}">新建项目</a>   
 
-</body>
-</html>
+最新动态：
+XXX创建了XX项目
+XXX为XXX项目上传了文件
+
+
+{% endblock %}
+
+
+

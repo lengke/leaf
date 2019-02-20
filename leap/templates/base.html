@@ -1,3 +1,5 @@
+{% from 'bootstrap/nav.html' import render_nav_item %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,18 +7,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    
-    {{ bootstrap.load_css() }}
-    <title>
-        {% block title %}
-        {% endblock %}
-    </title>
+    {% block head %}
+        <title>{% block title %}{% endblock %}-LEAF</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        {% block styles %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='open-iconic/font/css/open-iconic-bootstrap.css') }}">
+        {% endblock styles %}
+    {% endblock head %}
 </head>
 <body>
-        {% block body %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="LEAF">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <div class="navbar-nav mr-auto">
+                    {{ render_nav_item('main.index', '首页') }}
+                    {{ render_nav_item('main.show_all_projects', '浏览项目') }}
+                    {{ render_nav_item('main.create_project', '新建项目') }}
+                    {{ render_nav_item('main.show_all_projects', '我的上传') }}
+                    {{ render_nav_item('main.show_all_projects', '@我的') }}
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <form class="form-inline my-2 my-lg-0" action="">
+                        <input type="text" name="q" class="form-control mr-sm-1" placeholder="项目、文件名或作者名"
+                               required>
+                        <button class="btn btn-light my-2 my-sm-0" type="submit">
+                            <span class="oi oi-magnifying-glass"></span>
+                        </button>
+                    </form>
+                </div>
+                <div class="navbar-nav ml-auto">
+                    {% if current_user.is_authenticated %}
+                    <small>
+                            <a href="{{ url_for('auth.logout') }}">退出登录</a>
+                            <br>
+                            <a href="{{ url_for('main.index') }}">个人资料</a>
+                    </small>
+                    {% else %}
+                    <small>
+                            <a href="{{ url_for('auth.login') }}">登录</a>
+                            <br>
+                            <a href="{{ url_for('auth.register') }}">注册</a>
+                    </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+<main>
+    <div class="container">
+        {% for message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ message[0] }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message[1] }}
+            </div>
+        {% endfor %}
+
+
+        {% block content %}
         {% endblock %}
 
-        {{ bootstrap.load_js() }}
 
+        <hr>
+        {% block footer %}
+            <footer>
+
+                    <p class="float-left">
+                        <small>&copy; 2019 &nbsp;
+                            <a href="" title="Written by Leng Ke">关于作者</a> -
+                            <a href="" title="Fork me on GitHub">GitHub源代码</a>
+                        </small>
+                    </p>
+                    <p class="float-right">
+                        <small>
+                            <span class="text-success">L</span>ight
+                            <span class="text-success">E</span>asy
+                            <span class="text-success">A</span>ll-round
+                            <span class="text-success">F</span>ile
+                            Management System</small>
+                    </p>
+
+            </footer>
+        {% endblock %}
+    </div>
+</main>
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
+    {{ moment.locale(auto_detect=True) }}
+{% endblock %}
 </body>
 </html>

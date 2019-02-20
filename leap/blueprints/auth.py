@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from leap.forms import RegisterForm, LoginForm
 from leap.ext import db
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user, login_required
 from leap.models import User
 
 auth = Blueprint("auth", __name__)
@@ -38,6 +38,9 @@ def register():
 # 用户登录
 @auth.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("main.index"))
+
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(mobile=form.mobile.data).first()
@@ -50,3 +53,12 @@ def login():
                 return redirect(url_for('main.index'))
         flash('密码错误', 'warning')
     return render_template("auth/login.html", form=form)
+
+
+# 用户退出登录
+@auth.route("/logout", methods=["GET", "POST"])
+@login_required
+def logout():
+    logout_user()
+    flash("你已退出登录", "info")
+    return redirect(url_for("main.index"))
