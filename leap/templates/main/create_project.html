@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>创建项目</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h2>创建项目</h2>
+{% block title %}新建{% endblock %}
 
-<h4>请在下方填写项目信息</h4>
+{% block content %}
+<p><h4>新建项目</h4></p>
 
 {% for message in form.errors %}
     {{ message }}
 {% endfor %}
-
 
 <form method="post" action="">
     {{ form.csrf_token }}
@@ -25,6 +19,6 @@
 
 </form>
 
+{% endblock %}
 
-</body>
-</html>
+

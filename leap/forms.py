@@ -23,7 +23,7 @@ class RegisterForm(FlaskForm):
     post = StringField("职位名称", validators=[DataRequired()])
     password = PasswordField("输入密码", validators=[DataRequired(), Length(6,128), EqualTo('password2')])
     password2 = PasswordField("确认密码", validators=[DataRequired()])
-    submit = SubmitField("提交")
+    submit = SubmitField("注册")
 
     # 防止email重复
     def validate_email(self, field):
@@ -41,7 +41,7 @@ class LoginForm(FlaskForm):
     mobile = StringField("输入手机号", validators=[DataRequired()])
     password = PasswordField("输入密码", validators=[DataRequired()])
     remember = BooleanField("记住我", default=True)
-    submit = SubmitField("提交")
+    submit = SubmitField("登录")
 
     def validate_mobile(self, field):
         if not User.query.filter_by(mobile=field.data).first():

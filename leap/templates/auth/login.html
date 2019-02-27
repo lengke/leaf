@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>用户登录</title>
-</head>
-<body>
-    <h2>用户登录</h2>
-    <br>    
+{% extends 'base.html' %}
+
+{% block title %}登录{% endblock %}
+
+{% block content %}
+<p><h4>用户登录</h4></p>
+<br>
     {% for message in form.mobile.errors %}
         {{ message }}
     {% endfor %}
@@ -21,6 +17,6 @@
         <p>{{ form.submit }}</p>
     </form>
 
+{% endblock %}
 
-</body>
-</html>
+
