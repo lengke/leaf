@@ -1,7 +1,7 @@
-Hello {{ user.username }},
+Hello {{ user.name }},
 
-Please visit the link below to verify your new email address:
+请点击下方链接来确认你的新邮箱地址:
 
     {{ url_for('user.change_email', token=token, _external=True) }}
 
-(Please do not reply to this notification, this inbox is not monitored.)
+(本邮件仅作为自动下发通知用途，并非客服邮箱，请勿回复)

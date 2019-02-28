@@ -1,9 +1,15 @@
 import os
 
 
+class Operations:
+    CONFIRM = 'confirm'
+    RESET_PASSWORD = 'reset-password'
+    CHANGE_EMAIL = 'change-email'
+
+
 class BaseConfig():
     SECRET_KEY = os.getenv("SECRET_KEY", "seCRet/Keyyys238823u")
-    LEAP_MAIL_SUBJECT_PREFIX = "[LEAP通知]"
+    LEAP_MAIL_SUBJECT_PREFIX = "【LEAP通知】"
 
     LEAP_ADMIN_EMAIL = "20167591@qq.com"
 
