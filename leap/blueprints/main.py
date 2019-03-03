@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, url_for, redirect
-from leap.forms import ProjectForm
+from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app
+from leap.forms import ProjectForm, UploadForm
 from leap.ext import db
 from leap.models import Project, File, User
 from flask_login import login_required, current_user
 from leap.decorators import confirm_required
+import os
 
 main = Blueprint("main", __name__)
 
@@ -50,7 +51,7 @@ def create_project():
             description=description,
             start_time=start_time,
             end_time=end_time,
-            its_creator = current_user
+            its_creator = current_user._get_current_object()
         )
         db.session.add(new_project)
         db.session.commit()
@@ -68,10 +69,54 @@ def my_uploads():
     return render_template("main/my_uploads.html", files=files)
 
 
-
 # @我的/提醒我看
 @main.route("/atme")
 @login_required
 @confirm_required
 def atme():
     return render_template("main/atme.html")
+
+
+# 上传文件
+@main.route("/upload/<project_id>", methods=["GET", "POST"])
+@login_required
+@confirm_required
+def upload(project_id):
+    project = Project.query.filter_by(id=project_id).first()
+    if project:
+        form = UploadForm()
+
+        if form.validate_on_submit():
+            file = form.file.data
+            origin_filename = str(file.filename)
+            secure_filename = "姑且先用我顶一下"
+            file_size = len(file.read())
+            description = form.description.data
+            author = form.author.data
+            reviewer = form.reviewer.data
+
+            file.save(os.path.join(current_app.config['UPLOAD_PATH'], origin_filename))
+
+            file =File(
+                secure_filename=secure_filename,
+                origin_filename=origin_filename,
+                file_size=file_size,
+                description=description,
+                author=author,
+                reviewer=reviewer
+            )
+
+            file.its_uploader = current_user._get_current_object()
+            file.its_project = project
+
+            db.session.add(file)
+            db.session.commit()
+
+            flash("文件上传成功", "success")
+            return redirect(url_for("main.show_all_projects"))
+
+        return render_template("main/upload.html", form=form, project=project)
+    else:
+        abort(404)
+
+

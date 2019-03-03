@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
 from leap.models import User
 
@@ -68,4 +69,17 @@ class ResetPasswordForm(FlaskForm):
     def validate_mobile(self, field):
         if not User.query.filter_by(mobile=field.data).first():
             raise ValidationError("该手机号未注册")
+
+# 上传文件的表单
+class UploadForm(FlaskForm):
+    file = FileField(
+        "上传文件：",
+        validators=[FileRequired(message='未选择文件')]
+    )
+    description = TextAreaField("文件简介：", validators=[DataRequired()])
+    author = StringField("文件作者：", validators=[DataRequired()])
+    reviewer = StringField("文件审核人：", validators=[DataRequired()])
+    submit = SubmitField('上传')
+
+
 

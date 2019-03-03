@@ -5,9 +5,6 @@
 {% block content %}
 <p><h4>新建项目</h4></p>
 
-{% for message in form.errors %}
-    {{ message }}
-{% endfor %}
 
 <form method="post" action="">
     {{ form.csrf_token }}

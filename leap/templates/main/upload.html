@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}上传文件{% endblock %}
+{% block content %}
+<p><h4>为 <strong>{{project.name}}</strong> 上传文件</h4></p>
+
+<hr>
+
+<form enctype="multipart/form-data" method="post" action="">
+    {{ form.csrf_token }}
+    <p>{{ form.file.label }} {{ form.file }}</p>
+    <br>
+    <p>{{ form.description.label }} {{ form.description }}</p>
+    <p>{{ form.author.label }} {{ form.author }}</p>
+    <p>{{ form.reviewer.label }} {{ form.reviewer }}</p>
+    <p>{{ form.submit }}</p>
+</form>
+
+{% endblock %}
