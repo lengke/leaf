@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
-from leap.forms import RegisterForm, LoginForm
+from leap.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm
 from leap.ext import db
 from flask_login import login_user, current_user, logout_user, login_required
 from leap.models import User
 from leap.utils import redirect_back, generate_token, validate_token, flash_errors
-from leap.emails import send_confirm_email
+from leap.emails import send_confirm_email, send_reset_password_email
 from leap.settings import Operations
 
 
@@ -20,6 +20,7 @@ def register():
     if form.validate_on_submit():
         name = form.name.data
         mobile = form.mobile.data
+        # 将Email地址统一小写化处理
         email = form.email.data.lower()
         department = form.department.data
         post = form.post.data
@@ -58,9 +59,9 @@ def login():
                 flash('登录成功', 'info')
                 return redirect_back()
             else:
-                flash('Your account is blocked.', 'warning')
+                flash('账号被锁，请联系管理员', 'warning')
                 return redirect_back()
-        flash('密码错误', 'warning')
+        flash('手机号或密码错误', 'warning')
     return render_template("auth/login.html", form=form)
 
 
@@ -102,41 +103,48 @@ def resend_confirm_email():
     return redirect(url_for('main.index'))
 
 
-# 以下代码还没完全搞懂
-# @auth.route('/forget-password', methods=['GET', 'POST'])
-# def forget_password():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('main.index'))
-#
-#     form = ForgetPasswordForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(email=form.email.data.lower()).first()
-#         if user:
-#             token = generate_token(user=user, operation=Operations.RESET_PASSWORD)
-#             send_reset_password_email(user=user, token=token)
-#             flash('Password reset email sent, check your inbox.', 'info')
-#             return redirect(url_for('.login'))
-#         flash('Invalid email.', 'warning')
-#         return redirect(url_for('.forget_password'))
-#     return render_template('auth/reset_password.html', form=form)
-#
-#
-# @auth.route('/reset-password/<token>', methods=['GET', 'POST'])
-# def reset_password(token):
-#     if current_user.is_authenticated:
-#         return redirect(url_for('main.index'))
-#
-#     form = ResetPasswordForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(email=form.email.data.lower()).first()
-#         if user is None:
-#             return redirect(url_for('main.index'))
-#         if validate_token(user=user, token=token, operation=Operations.RESET_PASSWORD,
-#                           new_password=form.password.data):
-#             flash('Password updated.', 'success')
-#             return redirect(url_for('.login'))
-#         else:
-#             flash('Invalid or expired link.', 'danger')
-#             return redirect(url_for('.forget_password'))
-#     return render_template('auth/reset_password.html', form=form)
+# 忘记密码
+@auth.route('/forget-password', methods=['GET', 'POST'])
+def forget_password():
+    if current_user.is_authenticated:
+        flash("您已登录，不能重置密码", "info")
+        return redirect(url_for("main.index"))
+
+    form = ForgetPasswordForm()
+
+    if form.validate_on_submit():
+        mobile = form.mobile.data
+        user = User.query.filter_by(mobile=mobile).first()
+        if user:
+            token = generate_token(user=user, operation=Operations.RESET_PASSWORD)
+            send_reset_password_email(user=user, token=token)
+            flash("密码重置邮件已发送", "info")
+            return redirect(url_for("auth.login"))
+        flash("输入的手机号错误", "warning")
+        return redirect(url_for("auth.forget_password"))
+
+    return render_template("auth/forget_password.html", form=form)
+
+
+# 更改新密码
+@auth.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        flash("您已登录，不能重置密码", "info")
+        return redirect(url_for('main.index'))
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        mobile = form.mobile.data
+        user = User.query.filter_by(mobile=mobile).first()
+        if user is None:
+            return redirect(url_for('main.index'))
+        if validate_token(user=user, token=token, operation=Operations.RESET_PASSWORD,
+                          new_password=form.password.data):
+            flash('密码更新成功，请重新登录', 'success')
+            return redirect(url_for('.login'))
+        else:
+            flash('验证失败', 'danger')
+            return redirect(url_for('.forget_password'))
+    return render_template('auth/reset_password.html', form=form)
 

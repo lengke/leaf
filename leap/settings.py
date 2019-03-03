@@ -26,6 +26,7 @@ class BaseConfig():
     BOOTSTRAP_SERVE_LOCAL = True
 
 
+
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.getenv("DB_URI_DEV")

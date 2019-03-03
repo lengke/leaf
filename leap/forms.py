@@ -38,8 +38,8 @@ class RegisterForm(FlaskForm):
 
 # 用户登录的表单
 class LoginForm(FlaskForm):
-    mobile = StringField("输入手机号", validators=[DataRequired()])
-    password = PasswordField("输入密码", validators=[DataRequired()])
+    mobile = StringField("手机号", validators=[DataRequired()])
+    password = PasswordField("密码", validators=[DataRequired()])
     remember = BooleanField("记住我", default=True)
     submit = SubmitField("登录")
 
@@ -47,4 +47,25 @@ class LoginForm(FlaskForm):
         if not User.query.filter_by(mobile=field.data).first():
             raise ValidationError("手机号未注册")
 
+
+# 忘记密码的表单
+class ForgetPasswordForm(FlaskForm):
+    mobile = StringField("手机号", validators=[DataRequired()])
+    submit = SubmitField("忘记密码")
+
+    def validate_mobile(self, field):
+        if not User.query.filter_by(mobile=field.data).first():
+            raise ValidationError("该手机号未注册")
+
+
+# 重置密码的表单
+class ResetPasswordForm(FlaskForm):
+    mobile = StringField("手机号", validators=[DataRequired()])
+    password = PasswordField("新密码", validators=[DataRequired(), Length(6,128)])
+    password2 = PasswordField("确认新密码", validators=[DataRequired(), EqualTo("password")])
+    submit = SubmitField("重置密码")
+
+    def validate_mobile(self, field):
+        if not User.query.filter_by(mobile=field.data).first():
+            raise ValidationError("该手机号未注册")
 

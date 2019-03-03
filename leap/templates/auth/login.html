@@ -11,8 +11,10 @@
     <br>
     <form method="post" action="">
         {{ form.csrf_token }}
-        <p>{{ form.mobile.label }} {{ form.mobile }}</p>
-        <p>{{ form.password.label }} {{ form.password }}</p>
+        <p>{{ form.mobile.label }}: {{ form.mobile }}</p>
+        <p>{{ form.password.label }}: {{ form.password }} &nbsp;
+            <a href="{{url_for('auth.forget_password')}}"><small>忘记密码</small></a>
+        </p>
         <p>{{ form.remember.label }} {{ form.remember }}</p>
         <p>{{ form.submit }}</p>
     </form>
