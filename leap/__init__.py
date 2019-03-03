@@ -2,6 +2,7 @@ from flask import Flask
 from leap.settings import config_list
 from leap.blueprints.main import main
 from leap.blueprints.auth import auth
+from leap.blueprints.user import user
 from leap.ext import db, login_manager, mail, bootstrap, moment
 
 
@@ -21,6 +22,7 @@ def create_app(config_name=None):
 def register_blueprints(app):
     app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(user, url_prefix="/user")
 
 
 def register_exts(app):

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}我的上传{% endblock %}
+{% block content %}
+<p><h4>我的上传</h4></p>
+
+{% if files %}
+
+    <table border=1 cellpadding="15">
+        <thead>
+            <th>文件名称</th>
+            <th>文件描述</th>
+            <th>文件大小</th>
+            <th>上传时间</th>
+            <th>文件所属项目</th>
+            <th>提醒谁看</th>
+        </thead>
+        <tbody>
+            {% for item in files %}
+            <tr>
+                <td>{{ item.origin_filename }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.file_size }}</td>
+                <td>{{ item.upload_time }}</td>
+                <td>{{ item.its_project.name }}</td>
+                <td>TODO::提醒谁看</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+    你还没有上传任何文件
+{% endif %}
+
+{% endblock %}

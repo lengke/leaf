@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{user_profile.name}}{% endblock %}
+
+{% block content %}
+<p><h5>【基本信息】</h5></p>
+<p>姓名：{{ user_profile.name}}</p>
+<p>邮箱：{{ user_profile.email}}</p>
+<p>手机号码：{{ user_profile.mobile }}</p>
+<p>部门：{{ user_profile.department}}</p>
+<p>职位：{{ user_profile.post}}</p>
+<p>注册时间：{{ user_profile.signup_time}}</p>
+
+<hr>
+<p><h5>【{{user_profile.name}} 创建的项目】</h5></p>
+
+{% for project in user_profile.its_creation %}
+
+<p>{{ project.name }} —— {{ project.description }} —— {{ project.create_time }}</p>
+
+{% endfor %}
+
+<hr>
+<p><h5>【{{user_profile.name }} 上传的文件】</h5></p>
+
+{% if user_profile.its_upload_files %}
+这里是他上传的所有文件
+{% else %}
+还没上传任何文件
+{% endif %}
+
+{% endblock %}

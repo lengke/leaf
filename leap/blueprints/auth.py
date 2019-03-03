@@ -15,10 +15,17 @@ auth = Blueprint("auth", __name__)
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        pass
+        flash("请先退出登录", "info")
+        return redirect(url_for("main.index"))
+
+
     form = RegisterForm()
     if form.validate_on_submit():
-        name = form.name.data
+        # 如果新用户跟已有用户重名则为其加上部门和职位名以区分
+        if User.query.filter_by(name=form.name.data).first():
+            name = form.name.data + "_" +form.department.data + "_" +form.post.data
+        else:
+            name = form.name.data
         mobile = form.mobile.data
         # 将Email地址统一小写化处理
         email = form.email.data.lower()

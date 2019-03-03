@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
-
 {% block title %}总览{% endblock %}
-
 {% block content %}
-
 <p><h4>项目总览</h4></p>
 
-<table border=0.5>
+<table border=1 cellpadding="15">
     <thead>
         <th>项目名称</th>
         <th>项目描述</th>
@@ -20,15 +17,13 @@
         <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
-            <td>暂时为空</td>
+            <td><a href="{{ url_for('user.profile', user_name=item.its_creator.name ) }}">{{ item.its_creator.name }}</a></td>
             <td>{{ item.create_time }}</td>
             <td>{{ item.start_time }}</td>
             <td>{{ item.end_time }}</td>
         </tr>
         {% endfor %}
     </tbody>
-
 </table>
-
 
 {% endblock %}
