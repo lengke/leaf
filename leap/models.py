@@ -90,7 +90,7 @@ class Project(db.Model):
 
 class File(db.Model):
 
-    # 以下为数据字段：
+    # 以下为数据字段：详情页
 
     id = db.Column(db.Integer, primary_key=True)
     origin_filename = db.Column(db.String(128), nullable=False)

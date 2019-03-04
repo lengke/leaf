@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}详情{% endblock %}
+{% block content %}
+<p><h6>{{ project.name }} 详情</h6></p>
+这里是项目详情
+<hr>
+<p><h6>{{ project.name }} 的所有文件</h6></p>
+<small>点击文件名即可下载</small>
+
+<table border=1 cellpadding="8">
+    <thead>
+        <th>文件名</th>
+        <th>文件大小</th>
+        <th>文件描述</th>
+        <th>上传人</th>
+        <th>作者</th>
+        <th>审核人</th>
+        <th>上传时间</th>
+        <th>提醒谁看</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for file in project.its_files %}
+        <tr>
+            <td><a href="{{ url_for('main.download', file_id=file.id) }}">{{ file.origin_filename }}</a></td>
+            <td>{{ file.file_size }}</td>
+            <td>{{ file.description }}</td>
+            <td>{{ file.its_uploader.name }}</td>
+            <td>{{ file.author }}</td>
+            <td>{{ file.reviewer }} </td>
+            <td>{{ moment(file.upload_time).format("LLL") }}</td>
+            <td>TODO：提醒谁看</td>
+            <td>TODO：文件的操作</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

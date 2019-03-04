@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app
+from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app, send_from_directory
 from leap.forms import ProjectForm, UploadForm
 from leap.ext import db
 from leap.models import Project, File, User
 from flask_login import login_required, current_user
 from leap.decorators import confirm_required
-import os
+from leap.utils import handle_file_size
+import os, uuid
 
 main = Blueprint("main", __name__)
 
@@ -89,13 +90,13 @@ def upload(project_id):
         if form.validate_on_submit():
             file = form.file.data
             origin_filename = str(file.filename)
-            secure_filename = "姑且先用我顶一下"
-            file_size = len(file.read())
+            secure_filename = str(uuid.uuid1())
+            # file_size = len(file.read())
             description = form.description.data
             author = form.author.data
             reviewer = form.reviewer.data
-
-            file.save(os.path.join(current_app.config['UPLOAD_PATH'], origin_filename))
+            file.save(os.path.join(current_app.config['UPLOAD_PATH'], secure_filename))
+            file_size = handle_file_size(os.path.join(current_app.config['UPLOAD_PATH'], secure_filename))
 
             file =File(
                 secure_filename=secure_filename,
@@ -119,4 +120,23 @@ def upload(project_id):
     else:
         abort(404)
 
+
+# 查看项目详情页
+@main.route("/detail/<project_id>")
+@login_required
+@confirm_required
+def project_detail(project_id):
+    project = Project.query.filter_by(id=project_id).first()
+    download_path = current_app.config['UPLOAD_PATH'] + '/'
+    return render_template("main/project_detail.html", project=project, download_path=download_path)
+
+# 下载文件
+@main.route("/download/<file_id>")
+@login_required
+@confirm_required
+def download(file_id):
+    file = File.query.filter_by(id=file_id).first()
+    filename = file.secure_filename
+    path = current_app.config['UPLOAD_PATH'] + "/"
+    return send_from_directory(path, filename, as_attachment=True)
 

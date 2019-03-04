@@ -20,7 +20,7 @@
                 <td>{{ item.origin_filename }}</td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.file_size }}</td>
-                <td>{{ item.upload_time }}</td>
+                <td>{{ moment(item.upload_time).format('LLL') }}</td>
                 <td>{{ item.its_project.name }}</td>
                 <td>TODO::提醒谁看</td>
             </tr>

@@ -16,7 +16,7 @@
 
 {% for project in user_profile.its_creation %}
 
-<p>{{ project.name }} —— {{ project.description }} —— {{ moment(project.create_time).format("LLL") }}</p>
+<p><a href="{{ url_for('main.project_detail', project_id=project.id ) }}">{{ project.name }}</a> —— {{ project.description }} —— {{ moment(project.create_time).format("LLL") }}</p>
 
 {% endfor %}
 
@@ -24,7 +24,13 @@
 <p><h5>【{{user_profile.name }} 上传的文件】</h5></p>
 
 {% if user_profile.its_upload_files %}
-这里是他上传的所有文件
+
+{% for file in user_profile.its_upload_files%}
+
+<p><a href="{{ url_for('main.project_detail', project_id=file.its_project.id ) }}">{{ file.origin_filename }}</a> —— {{ file.description }} —— {{ moment(file.upload_time).format("LLL") }}</p>
+
+{% endfor %}
+
 {% else %}
 还没上传任何文件
 {% endif %}
