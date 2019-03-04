@@ -18,6 +18,8 @@ def profile(user_name):
             "mobile": user.mobile,
             "signup_time": user.signup_time,
             "email": user.email,
+            "is_confirmed": user.is_confirmed,
+            "is_admin": user.is_admin,
             "its_creation": user.its_creation,
             "its_upload_files": user.its_upload_files
         }

@@ -138,5 +138,5 @@ def download(file_id):
     file = File.query.filter_by(id=file_id).first()
     filename = file.secure_filename
     path = current_app.config['UPLOAD_PATH'] + "/"
-    return send_from_directory(path, filename, as_attachment=True)
+    return send_from_directory(path, filename, attachment_filename=file.origin_filename ,as_attachment=True)
 
