@@ -22,7 +22,7 @@
             <td>{{ item.id }}</td>
             <td><a href="{{ url_for('main.project_detail', project_id=item.id ) }}">{{ item.name }}</a></td>
             <td>{{ item.description }}</td>
-            <td><a href="{{ url_for('user.profile', user_name=item.its_creator.name ) }}">{{ item.its_creator.name }}</a></td>
+            <td><a href="{{ url_for('admin.profile', user_name=item.its_creator.name ) }}">{{ item.its_creator.name }}</a></td>
             <td>{{ moment(item.create_time).format("ll") }}</td>
             <td>{{ item.start_time }}</td>
             <td>{{ item.end_time }}</td>

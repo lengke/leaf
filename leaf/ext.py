@@ -18,7 +18,7 @@ login_manager.login_message_category = "warning"
 
 @login_manager.user_loader
 def load_user(user_id):
-   from leap.models import User
+   from leaf.models import User
    user = User.query.get(int(user_id))
    return user
 

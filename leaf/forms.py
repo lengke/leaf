@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField, SelectMultipleField, DateField
 from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
-from leap.models import User
+from leaf.models import User
 from flask import current_app
 
 

@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app, send_from_directory
-from leap.forms import ProjectForm, UploadForm, ChooseMemberForm
-from leap.ext import db
-from leap.models import Project, File, User
+from leaf.forms import ProjectForm, UploadForm, ChooseMemberForm
+from leaf.ext import db
+from leaf.models import Project, File, User
 from flask_login import login_required, current_user
-from leap.decorators import confirm_required
-from leap.utils import redirect_back
+from leaf.decorators import confirm_required
+from leaf.utils import redirect_back
 import os, uuid
 
 main = Blueprint("main", __name__)

@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
-from leap.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm
-from leap.ext import db
+from leaf.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm
+from leaf.ext import db
 from flask_login import login_user, current_user, logout_user, login_required
-from leap.models import User
-from leap.utils import redirect_back, generate_token, validate_token, flash_errors
-from leap.emails import send_confirm_email, send_reset_password_email
-from leap.settings import Operations
+from leaf.models import User
+from leaf.utils import redirect_back, generate_token, validate_token, flash_errors
+from leaf.emails import send_confirm_email, send_reset_password_email
+from leaf.settings import Operations
 
 
 auth = Blueprint("auth", __name__)

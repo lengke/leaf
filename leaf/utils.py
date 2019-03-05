@@ -11,9 +11,9 @@ from flask import current_app, request, url_for, redirect, flash
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
-from leap.ext import db
-from leap.models import User
-from leap.settings import Operations
+from leaf.ext import db
+from leaf.models import User
+from leaf.settings import Operations
 
 
 def generate_token(user, operation, expire_in=None, **kwargs):

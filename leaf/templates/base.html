@@ -35,7 +35,7 @@
                     {{ render_nav_item('main.show_all_projects', '项目总览') }}
                     {{ render_nav_item('main.create_project', '新建项目') }}
                     {{ render_nav_item('main.my_uploads', '我的上传') }}
-                    {{ render_nav_item('main.atme', '@我的') }}
+                    {{ render_nav_item('main.atme', '系统管理') }}
                     &nbsp;
                     &nbsp;
                     &nbsp;
@@ -52,7 +52,7 @@
                     <small>
                             <a href="{{ url_for('auth.logout') }}">退出登录</a>
                             <br>
-                            <a href="{{ url_for('user.profile', user_name = current_user.name) }}">个人资料</a>
+                            <a href="{{ url_for('admin.profile', user_name = current_user.name) }}">个人资料</a>
                     </small>
                     {% else %}
                     <small>
@@ -87,7 +87,7 @@
 
                     <p class="float-left">
                         <small>&copy; 2019 &nbsp;
-                            <a href="" title="Written by Leng Ke">关于作者</a> -
+                            Written By 冷轲 -
                             <a href="https://github.com/lengke/leap" title="Fork me on GitHub">GitHub源代码</a>
                         </small>
                     </p>

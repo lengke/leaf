@@ -1,15 +1,16 @@
-LEAP = Light Easy All-round Project management system
+
+项目持续进行中。
 
 原本打算用Flask做一个跨团队的营销项目管理系统，但是工程量太大了，
-作为菜鸟，我很清楚自己搞不定。
+我自己搞不定。
 
-所以退而求其次，LEAP变成了LEAF
-Light Easy All-round File management system
+所以退而求其次，这个应用就叫LEAF
+意思是Light Easy Agile File management system
+即，【轻简灵的项目文档管理系统】
 
-即，轻量化、简单、全面的项目文档管理系统。
-主要目的是解决跨团队协作中的文档管理、更新、通知和同步的难点。
+主要目的是解决跨团队协作中的文档管理和通知的难点。
 
 目前就是这些，后面想到什么再补充。
 
 2019年2月28日
-
+Leng Ke

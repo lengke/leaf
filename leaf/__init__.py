@@ -1,10 +1,10 @@
 from flask import Flask
-from leap.settings import config_list
-from leap.blueprints.main import main
-from leap.blueprints.auth import auth
-from leap.blueprints.user import user
-from leap.ext import db, login_manager, mail, bootstrap, moment
-from leap.utils import handle_file_size
+from leaf.settings import config_list
+from leaf.blueprints.main import main
+from leaf.blueprints.auth import auth
+from leaf.blueprints.admin import admin
+from leaf.ext import db, login_manager, mail, bootstrap, moment
+from leaf.utils import handle_file_size
 
 
 def create_app(config_name=None):
@@ -13,7 +13,7 @@ def create_app(config_name=None):
     else:
         current_config = config_list[config_name]
 
-    app = Flask("leap")
+    app = Flask("leaf")
     app.config.from_object(current_config)
     register_exts(app)
     register_blueprints(app)
@@ -23,7 +23,7 @@ def create_app(config_name=None):
 def register_blueprints(app):
     app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix="/auth")
-    app.register_blueprint(user, url_prefix="/user")
+    app.register_blueprint(admin, url_prefix="/admin")
 
 
 def register_exts(app):
