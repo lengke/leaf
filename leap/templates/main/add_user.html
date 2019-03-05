@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}添加成员{% endblock %}
+{% block content %}
+<p><h6> 为 【{{ project.name }}】 添加成员</h6></p>
+
+<form action="" method="post">
+    {{ form.csrf_token }}
+    <p>{{ form.member.label}}:</p>
+    <p>{{ form.member }}</p>
+    <p>{{ form.submit }}</p>
+</form>
+<p><small>提示：按住ctl键可以多选</small></p>
+<hr>
+<p><h6> 【{{ project.name }}】 现有成员列表</h6></p>
+
+{% for user in project.its_member_users%}
+
+    <p>{{user.name}}</p>
+
+{% endfor %}
+
+{% endblock %}

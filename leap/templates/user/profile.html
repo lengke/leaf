@@ -1,44 +1,65 @@
 {% extends 'base.html' %}
 
-{% block title %}{{user_profile.name}}{% endblock %}
+{% block title %}{{user.name}}{% endblock %}
 
 {% block content %}
 <p><h5>【基本信息】</h5></p>
-<p>姓名：{{ user_profile.name}}</p>
-<p>邮箱：{{ user_profile.email}}</p>
-<p>手机号码：{{ user_profile.mobile }}</p>
-<p>部门：{{ user_profile.department}}</p>
-<p>职位：{{ user_profile.post}}</p>
-<p>注册时间：{{ moment(user_profile.signup_time).format("LLL") }}</p>
+<p>姓名：{{ user.name}}</p>
+<p>邮箱：{{ user.email}}</p>
+<p>手机号码：{{ user.mobile }}</p>
+<p>部门：{{ user.department}}</p>
+<p>职位：{{ user.post}}</p>
+<p>注册时间：{{ moment(user.signup_time).format("LLL") }}</p>
+<p>用户权限：
+    {% if user.is_admin %}
+        系统管理员
+    {% elif user.is_blocked %}
+        被禁用户
+    {% else %}
+        普通用户
+    {% endif %}
+</p>
 
-{% if user_profile.is_confirmed == 0 %}
-
+{% if user.is_confirmed == 0 %}
 <strong>您还没有验证公司邮箱，将无法正常使用LEAF的全部功能</strong>
 
 {% endif %}
 
 <hr>
-<p><h5>【{{user_profile.name}} 创建的项目】</h5></p>
 
-{% for project in user_profile.its_creation %}
+<p><h5>【{{user.name}} 参与的项目】</h5></p>
+{% if user.its_involve_projects %}
+    {% for project in user.its_involve_projects %}
 
-<p><a href="{{ url_for('main.project_detail', project_id=project.id ) }}">{{ project.name }}</a> —— {{ project.description }} —— {{ moment(project.create_time).format("LLL") }}</p>
+    <p><a href="{{ url_for('main.project_detail', project_id=project.id ) }}">{{ project.name }}</a></p>
 
-{% endfor %}
+    {% endfor %}
+{% else %}
+    未参与任何项目
+
+{% endif %}
 
 <hr>
-<p><h5>【{{user_profile.name }} 上传的文件】</h5></p>
-
-{% if user_profile.its_upload_files %}
-
-{% for file in user_profile.its_upload_files%}
-
-<p><a href="{{ url_for('main.project_detail', project_id=file.its_project.id ) }}">{{ file.origin_filename }}</a> —— {{ file.description }} —— {{ moment(file.upload_time).format("LLL") }}</p>
-
-{% endfor %}
+<p><h5>【{{user.name}} 创建的项目】</h5></p>
+{% if user.its_creation %}
+    {% for project in user.its_creation %}
+    <p><a href="{{ url_for('main.project_detail', project_id=project.id ) }}">{{ project.name }}</a></p>
+    {% endfor %}
 
 {% else %}
-还没上传任何文件
+    未创建任何项目
+
+{% endif %}
+
+<hr>
+<p><h5>【{{user.name }} 上传的文件】</h5></p>
+
+{% if user.its_upload_files %}
+    {% for file in user.its_upload_files%}
+    <p><a href="{{ url_for('main.project_detail', project_id=file.its_project.id ) }}">{{ file.origin_filename }}</a></p>
+    {% endfor %}
+{% else %}
+    未上传任何文件
 {% endif %}
 
 {% endblock %}

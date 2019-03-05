@@ -3,16 +3,17 @@
 {% block content %}
 <p><h4>项目总览</h4></p>
 
-<table border=1 cellpadding="8">
+<table border=1 cellpadding="10">
     <thead>
-        <th>项目ID</th>
-        <th>项目名称</th>
-        <th>项目描述</th>
+        <th>ID</th>
+        <th>名称</th>
+        <th>描述</th>
         <th>创建人</th>
         <th>创建时间</th>
         <th>开始时间</th>
         <th>结束时间</th>
-        <th>已上传文件数</th>
+        <th>文件数</th>
+        <th>成员数</th>
         <th>操作</th>
     </thead>
     <tbody>
@@ -22,11 +23,22 @@
             <td><a href="{{ url_for('main.project_detail', project_id=item.id ) }}">{{ item.name }}</a></td>
             <td>{{ item.description }}</td>
             <td><a href="{{ url_for('user.profile', user_name=item.its_creator.name ) }}">{{ item.its_creator.name }}</a></td>
-            <td>{{ moment(item.create_time).format("LLL") }}</td>
+            <td>{{ moment(item.create_time).format("ll") }}</td>
             <td>{{ item.start_time }}</td>
             <td>{{ item.end_time }}</td>
             <td> {{ item.its_files|count }}</td>
-            <td><a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件</a></td>
+            <td>{{ item.its_member_users | count}}</td>
+            <td>
+                <small>
+                <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件</a><br>
+                <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员</a><br>
+                <a href="">编辑简介</a><br>
+                <a href="">隐藏项目</a><br>
+                {% if current_user.is_admin %}
+                <a href="">删除项目</a>
+                {% endif %}
+                </small>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

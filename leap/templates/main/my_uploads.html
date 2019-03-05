@@ -12,17 +12,23 @@
             <th>文件大小</th>
             <th>上传时间</th>
             <th>文件所属项目</th>
-            <th>提醒谁看</th>
+            <th>操作</th>
         </thead>
         <tbody>
             {% for item in files %}
             <tr>
                 <td>{{ item.origin_filename }}</td>
                 <td>{{ item.description }}</td>
-                <td>{{ item.file_size }}</td>
-                <td>{{ moment(item.upload_time).format('LLL') }}</td>
+                <td>{{ item.file_size | size}}</td>
+                <td>{{ moment(item.upload_time).format('lll') }}</td>
                 <td>{{ item.its_project.name }}</td>
-                <td>TODO::提醒谁看</td>
+                <td>
+                    <a href="">隐藏文件</a><br>
+                    <a href="">修改简介</a><br>
+                    {% if current_user.is_admin %}
+                    <a href="">删除文件</a>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -4,6 +4,7 @@ from leap.blueprints.main import main
 from leap.blueprints.auth import auth
 from leap.blueprints.user import user
 from leap.ext import db, login_manager, mail, bootstrap, moment
+from leap.utils import handle_file_size
 
 
 def create_app(config_name=None):
@@ -31,7 +32,7 @@ def register_exts(app):
     bootstrap.init_app(app)
     mail.init_app(app)
     moment.init_app(app)
-
+    app.add_template_filter(handle_file_size, 'size')
 
 
 

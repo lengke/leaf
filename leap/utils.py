@@ -52,9 +52,11 @@ def validate_token(user, token, operation, new_password=None):
     db.session.commit()
     return True
 
+
 # 处理文件大小单位换算
-def handle_file_size(file_path):
-    file_size = os.path.getsize(file_path)
+# 自定义处理文件大小换算和单位的过滤器
+def handle_file_size(file_size):
+    file_size = int(file_size)
     if file_size < 1024:
         file_size = str(file_size) + "B"
     elif (1024 *1024) > file_size >= 1024:
@@ -64,6 +66,8 @@ def handle_file_size(file_path):
     elif file_size >= (1024*1024*1024):
         file_size = str(round(file_size/(1024*1024*1024), 2)) + "GB"
     return file_size
+
+
 
 # def rename_image(old_filename):
 #     ext = os.path.splitext(old_filename)[1]

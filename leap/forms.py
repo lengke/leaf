@@ -1,16 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField
-from flask_wtf.file import FileField, FileAllowed, FileRequired
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField, SelectMultipleField, DateField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
 from leap.models import User
+from flask import current_app
 
 
 # 创建项目的表单
 class ProjectForm(FlaskForm):
     name = StringField("项目名称：", validators=[DataRequired()])
     description = TextAreaField("项目描述：", validators=[DataRequired()])
-    start_time = StringField("项目开始时间：", validators=[DataRequired()])
-    end_time = StringField("项目结束时间：", validators=[DataRequired()])
+    start_time = DateField("项目开始日期：", format='%Y-%m-%d', validators=[DataRequired()])
+    end_time = DateField("项目结束日期：", format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField("提交")
 
 
@@ -80,6 +81,17 @@ class UploadForm(FlaskForm):
     author = StringField("文件作者：", validators=[DataRequired()])
     reviewer = StringField("文件审核人：", validators=[DataRequired()])
     submit = SubmitField('上传')
+
+
+# 选择为项目添加组员的表单
+class ChooseMemberForm(FlaskForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.member.choices = [(user.id, user.name) for user in User.query.all()]
+
+    member = SelectMultipleField("选择用户", coerce=int, validators=[DataRequired()])
+    submit = SubmitField("提交")
+
 
 
 

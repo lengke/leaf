@@ -10,10 +10,16 @@
     {{ form.csrf_token }}
     <p>{{ form.name.label }} {{ form.name }}</p>
     <p>{{ form.description.label }} {{ form.description }}</p>
+    <small>
+    <p>
+        项目开始和结束日期请严格按照 "年-月-日"的格式填写，中间分隔符-为英文输入法的短横线。
+    </p>
+    <p>例如：2019-3-16</p>
+        </small>
     <p>{{ form.start_time.label }} {{ form.start_time }}</p>
     <p>{{ form.end_time.label }} {{ form.end_time }}</p>
-    <p>{{ form.submit }}</p>
 
+    <p>{{ form.submit }}</p>
 </form>
 
 <p><small>注意：为了保证文件安全，项目创建成功后，只有系统管理员可以将其删除。普通用户只可以修改项目基本信息。</small></p>

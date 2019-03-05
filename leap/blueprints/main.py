@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app, send_from_directory
-from leap.forms import ProjectForm, UploadForm
+from leap.forms import ProjectForm, UploadForm, ChooseMemberForm
 from leap.ext import db
 from leap.models import Project, File, User
 from flask_login import login_required, current_user
 from leap.decorators import confirm_required
-from leap.utils import handle_file_size
+from leap.utils import redirect_back
 import os, uuid
 
 main = Blueprint("main", __name__)
@@ -54,6 +54,7 @@ def create_project():
             end_time=end_time,
             its_creator = current_user._get_current_object()
         )
+        new_project.its_member_users.append(current_user._get_current_object())
         db.session.add(new_project)
         db.session.commit()
         return redirect(url_for("main.show_all_projects"))
@@ -96,8 +97,7 @@ def upload(project_id):
             author = form.author.data
             reviewer = form.reviewer.data
             file.save(os.path.join(current_app.config['UPLOAD_PATH'], secure_filename))
-            file_size = handle_file_size(os.path.join(current_app.config['UPLOAD_PATH'], secure_filename))
-
+            file_size = int(os.path.getsize(os.path.join(current_app.config['UPLOAD_PATH'], secure_filename)))
             file =File(
                 secure_filename=secure_filename,
                 origin_filename=origin_filename,
@@ -140,3 +140,22 @@ def download(file_id):
     path = current_app.config['UPLOAD_PATH'] + "/"
     return send_from_directory(path, filename, attachment_filename=file.origin_filename ,as_attachment=True)
 
+
+# 添加项目成员
+@main.route("/adduser/<project_id>", methods=["GET", "POST"])
+@login_required
+@confirm_required
+def add_user(project_id):
+    project = Project.query.filter_by(id=project_id).first()
+    form = ChooseMemberForm()
+    if form.validate_on_submit():
+
+        choosen_id_list = form.member.data
+        for item in choosen_id_list:
+            user = User.query.filter_by(id = item).first()
+            project.its_member_users.append(user)
+        db.session.commit()
+        flash("添加成员成功", "success")
+        return redirect_back()
+
+    return render_template("main/add_user.html", form=form, project=project)

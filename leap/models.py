@@ -106,8 +106,7 @@ class File(db.Model):
     author = db.Column(db.String(64), nullable=False)
     reviewer = db.Column(db.String(64), nullable=False)
 
-    # 文件是否被保护，是否可见
-    is_protected = db.Column(db.Boolean, default=False)
+    # 文件是否可见
     is_visable = db.Column(db.Boolean, default=True)
 
     # 与User和Project表关联的外键
