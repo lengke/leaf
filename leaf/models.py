@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
 
     # 以下为数据字段：
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40), nullable=False)
+    name = db.Column(db.String(40), nullable=False, unique=True)
     # 将以手机号作为用户身份的唯一标识！
     mobile = db.Column(db.String(15), unique=True)
     email = db.Column(db.String(64), unique=True)
@@ -77,7 +77,8 @@ class Project(db.Model):
     its_creator = db.relationship("User", back_populates="its_creation")
 
     # 项目所有的文件
-    its_files = db.relationship("File", back_populates="its_project")
+    # 设置级联操作，当项目被删除则对应的文件也自动删除
+    its_files = db.relationship("File", back_populates="its_project", cascade="all")
 
     #以下为与User表的多对多关系属性：
 

@@ -16,6 +16,8 @@ def index():
     # db.drop_all()
     # db.create_all()
 
+    latest_project = Project.query.order_by(Project.create_time.desc()).first()
+    latest_file = File.query.order_by(File.upload_time.desc()).first()
     projects_sum = Project.query.count()
     files_sum = File.query.count()
     users_sum = User.query.count()
@@ -23,7 +25,9 @@ def index():
     return render_template("main/index.html",
                            files_sum=files_sum,
                            projects_sum=projects_sum,
-                           users_sum=users_sum
+                           users_sum=users_sum,
+                           latest_project=latest_project,
+                           latest_file=latest_file
                            )
 
 

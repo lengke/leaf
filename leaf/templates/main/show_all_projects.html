@@ -3,7 +3,7 @@
 {% block content %}
 <p><h4>项目总览</h4></p>
 
-<table border=1 cellpadding="10">
+<table border=1 cellpadding="6">
     <thead>
         <th>ID</th>
         <th>名称</th>
@@ -30,10 +30,10 @@
             <td>{{ item.its_member_users | count}}</td>
             <td>
                 <small>
-                <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件</a><br>
-                <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员</a><br>
-                <a href="">编辑简介</a><br>
-                <a href="">隐藏项目</a><br>
+                <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件/</a><br>
+                <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员/</a><br>
+                <a href="">编辑简介/</a><br>
+                <a href="">隐藏项目/</a><br>
                 {% if current_user.is_admin %}
                 <a href="">删除项目</a>
                 {% endif %}

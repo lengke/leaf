@@ -13,11 +13,27 @@
 <p>现有项目共{{projects_sum}}个，现有文件共{{files_sum}}个，注册用户共{{ users_sum }}人。</p>
 
 <hr>
-<!--TODO(Lengke):这里要写-->
-最新动态：
-XXX创建了XX项目
-XXX为XXX项目上传了文件
+<p>最新动态：</p>
+{% if latest_project %}
+    <p>
+        <strong><a href="{{ url_for('admin.profile', user_name=latest_project.its_creator.name ) }}">{{latest_project.its_creator.name}}</a></strong>
+        在 {{moment(latest_project.create_time).format('lll')}}
+        创建了 <strong><a href="{{ url_for('main.project_detail', project_id=latest_project.id ) }}">{{latest_project.name}}</a></strong>
+    </p>
 
+{% else %}
+    <p>还没有建立任何项目</p>
+{% endif %}
+
+{% if latest_file %}
+    <p>
+        <strong><a href="{{ url_for('admin.profile', user_name=latest_file.its_uploader.name ) }}">{{latest_file.its_uploader.name}}</a></strong>
+        在 {{moment(latest_file.upload_time).format('lll')}}
+        上传了 <strong><a href="{{ url_for('main.project_detail', project_id=latest_file.its_project.id ) }}">{{latest_file.origin_filename}}</a></strong>
+    </p>
+{% else %}
+    <p>还没有上传任何文件</p>
+{% endif %}
 
 {% endblock %}
 
