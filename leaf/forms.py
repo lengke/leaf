@@ -8,10 +8,10 @@ from flask import current_app
 
 # 创建项目的表单
 class ProjectForm(FlaskForm):
-    name = StringField("项目名称：", validators=[DataRequired()])
-    description = TextAreaField("项目描述：", validators=[DataRequired()])
-    start_time = DateField("项目开始日期：", format='%Y-%m-%d', validators=[DataRequired()])
-    end_time = DateField("项目结束日期：", format='%Y-%m-%d', validators=[DataRequired()])
+    name = StringField("项目名称：", validators=[DataRequired(message="这项不能为空")])
+    description = TextAreaField("项目描述：", validators=[DataRequired(message="不能为空")])
+    start_time = DateField("项目开始日期：", format='%Y-%m-%d', validators=[DataRequired(message="请注意格式要求且不能为空")])
+    end_time = DateField("项目结束日期：", format='%Y-%m-%d', validators=[DataRequired(message="请注意格式要求且不能为空")])
     submit = SubmitField("提交")
 
 

@@ -9,16 +9,29 @@
 <form method="post" action="">
     {{ form.csrf_token }}
     <p>{{ form.name.label }} {{ form.name }}</p>
+        {% for error in form.name.errors %}
+            {{ error }}
+        {% endfor %}
     <p>{{ form.description.label }} {{ form.description }}</p>
+        {% for error in form.description.errors %}
+            {{ error }}
+        {% endfor %}
     <small>
     <p>
         项目开始和结束日期请严格按照 "年-月-日"的格式填写，中间分隔符-为英文输入法的短横线。
     </p>
     <p>例如：2019-3-16</p>
         </small>
-    <p>{{ form.start_time.label }} {{ form.start_time }}</p>
-    <p>{{ form.end_time.label }} {{ form.end_time }}</p>
-
+    <p>{{ form.start_time.label }} {{ form.start_time }}
+        {% for error in form.start_time.errors %}
+            <small>{{ error }}</small>
+        {% endfor %}
+    </p>
+    <p>{{ form.end_time.label }} {{ form.end_time }}
+        {% for error in form.end_time.errors %}
+            <small>{{ error }}</small>
+        {% endfor %}
+    </p>
     <p>{{ form.submit }}</p>
 </form>
 

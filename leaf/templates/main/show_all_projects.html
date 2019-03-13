@@ -30,10 +30,23 @@
             <td>{{ item.its_member_users | count}}</td>
             <td>
                 <small>
-                <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件/</a><br>
-                <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员/</a><br>
-                <a href="">编辑简介/</a><br>
-                <a href="">隐藏项目/</a><br>
+
+                <!--登录用户必须是项目组成员或Admin才能添加成员    -->
+                {% for x in item.its_member_users %}
+                    {% if current_user.is_admin or current_user.id  == x.id %}
+                    <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件/</a><br>
+                    <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员/</a><br>
+                    {% else %}
+                    你还不是项目成员
+                    {% endif %}
+                {% endfor %}
+
+                <!--登录用户必须是项目创建人或Admin才有下列2个选项-->
+                {% if current_user.is_admin or current_user.id  == item.its_creator.id %}
+                    <a href="">编辑简介/</a><br>
+                    <a href="">隐藏项目/</a><br>
+                {% endif %}
+                <!--登录用户必须是系统管理员Admin才能删除项目    -->
                 {% if current_user.is_admin %}
                 <a href="">删除项目</a>
                 {% endif %}
