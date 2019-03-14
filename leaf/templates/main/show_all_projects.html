@@ -32,14 +32,13 @@
                 <small>
 
                 <!--登录用户必须是项目组成员或Admin才能添加成员    -->
-                {% for x in item.its_member_users %}
-                    {% if current_user.is_admin or current_user.id  == x.id %}
+                {% if current_user.is_admin or current_user in item.its_member_users %}
                     <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件/</a><br>
                     <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员/</a><br>
-                    {% else %}
+                {% else %}
                     你还不是项目成员
-                    {% endif %}
-                {% endfor %}
+                {% endif %}
+
 
                 <!--登录用户必须是项目创建人或Admin才有下列2个选项-->
                 {% if current_user.is_admin or current_user.id  == item.its_creator.id %}

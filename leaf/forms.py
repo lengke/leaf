@@ -87,6 +87,7 @@ class UploadForm(FlaskForm):
 class ChooseMemberForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # TODO(lengke):需要优化此处的查询，不应包括自己
         self.member.choices = [(user.id, user.name) for user in User.query.all()]
 
     member = SelectMultipleField("选择用户", coerce=int, validators=[DataRequired()])
