@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}添加成员{% endblock %}
 {% block content %}
+
+<!--当没有可添加的成员时，隐藏表单的Submit字段-->
+<style>
+    .hideme {
+        display:none;
+        }
+</style>
+
 <p><h6> 为 【{{ project.name }}】 添加成员</h6></p>
 
 <form action="" method="post">

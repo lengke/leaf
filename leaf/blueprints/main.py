@@ -134,6 +134,7 @@ def project_detail(project_id):
     download_path = current_app.config['UPLOAD_PATH'] + '/'
     return render_template("main/project_detail.html", project=project, download_path=download_path)
 
+
 # 下载文件
 @main.route("/download/<file_id>")
 @login_required
@@ -151,9 +152,8 @@ def download(file_id):
 @confirm_required
 def add_user(project_id):
     project = Project.query.filter_by(id=project_id).first()
-    form = ChooseMemberForm()
+    form = ChooseMemberForm(project=project)
     if form.validate_on_submit():
-
         choosen_id_list = form.member.data
         for item in choosen_id_list:
             user = User.query.filter_by(id = item).first()

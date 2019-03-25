@@ -20,9 +20,14 @@
     {% endif %}
 </p>
 
+<a href="{{ url_for('auth.change_password') }}">修改登录密码</a>
+<br>
+<a href="{{ url_for('auth.change_email') }}">修改邮箱地址</a>
+<br>
+<a href="">修改其他个人信息</a>
+
 {% if user.is_confirmed == 0 %}
 <strong>您还没有验证公司邮箱，将无法正常使用LEAF的全部功能</strong>
-
 {% endif %}
 
 <hr>

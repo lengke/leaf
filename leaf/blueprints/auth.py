@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
-from leaf.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm
+from leaf.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm, ChangePasswordForm
 from leaf.ext import db
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required, login_fresh, confirm_login
 from leaf.models import User
 from leaf.utils import redirect_back, generate_token, validate_token, flash_errors
 from leaf.emails import send_confirm_email, send_reset_password_email
@@ -133,7 +133,7 @@ def forget_password():
     return render_template("auth/forget_password.html", form=form)
 
 
-# 更改新密码
+# 忘记密码之后，更改新密码
 @auth.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
@@ -154,4 +154,42 @@ def reset_password(token):
             flash('验证失败', 'danger')
             return redirect(url_for('.forget_password'))
     return render_template('auth/reset_password.html', form=form)
+
+
+
+# 用户主动修改密码
+@auth.route("/change-password", methods=["GET", "POST"])
+@fresh_login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit() and current_user.validate_password(form.old_password.data):
+        current_user.set_password(form.new_password.data)
+        db.session.commit()
+        flash("密码修改成功，请用新密码重新登录", "success")
+        logout_user()
+        return redirect(url_for("main.index"))
+    return render_template("auth/change_password.html", form=form)
+
+
+# 非fresh_login的用户重新认证
+@auth.route("/re-authenticate", methods=["POST", "GET"])
+@login_required
+def re_authenticate():
+    # 先判断用户的登录是否新鲜
+    if login_fresh():
+        return redirect(url_for("main.index"))
+    form = LoginForm()
+    if form.validate_on_submit() and current_user.validate_password(form.password.data):
+        # 将用户会话重新设置为新鲜的
+        confirm_login()
+        return redirect_back()
+    return render_template("auth/login.html", form=form)
+
+
+# TODO:(lengke)这里还没写
+# 用户主动修改邮箱地址
+@auth.route("/change-email", methods=["Get", "POST"])
+@fresh_login_required
+def change_email():
+    return render_template("auth/change-email.html")
 

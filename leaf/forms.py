@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, TextAreaField, PasswordField, Bool
 from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
 from leaf.models import User
-from flask import current_app
+from flask_login import current_user
 
 
 # 创建项目的表单
@@ -60,7 +60,7 @@ class ForgetPasswordForm(FlaskForm):
             raise ValidationError("该手机号未注册")
 
 
-# 重置密码的表单
+# 忘记密码后重置密码的表单
 class ResetPasswordForm(FlaskForm):
     mobile = StringField("手机号", validators=[DataRequired()])
     password = PasswordField("新密码", validators=[DataRequired(), Length(6,128)])
@@ -85,14 +85,27 @@ class UploadForm(FlaskForm):
 
 # 选择为项目添加组员的表单
 class ChooseMemberForm(FlaskForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, project, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # TODO(lengke):需要优化此处的查询，不应包括自己
-        self.member.choices = [(user.id, user.name) for user in User.query.all()]
+
+        # 查询用户名单并将自己和已是成员的人排除在外
+        self.member.choices = []
+        for user in User.query.all():
+            if user.id != current_user.id and user not in project.its_member_users:
+                self.member.choices.append((user.id, user.name))
+            else:
+                continue
+        if len(self.member.choices) == 0:
+            self.member.choices = [(-1, "没有可添加的用户"), ]
+            self.submit.render_kw = {"class": "hideme"}
 
     member = SelectMultipleField("选择用户", coerce=int, validators=[DataRequired()])
     submit = SubmitField("提交")
 
 
-
-
+# 登录状态下修改密码的表单
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField("输入旧密码", validators=[DataRequired()])
+    new_password = PasswordField("输入新密码", validators=[DataRequired(), Length(6,128), EqualTo('new_password2')])
+    new_password2 = PasswordField("确认新密码", validators=[DataRequired()])
+    submit = SubmitField("提交")
