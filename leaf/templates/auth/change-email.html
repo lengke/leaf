@@ -2,7 +2,14 @@
 {% block title %}修改邮箱{% endblock %}
 {% block content %}
 <p><h6>修改邮箱地址</h6></p>
-
-
-
+<br>
+<form action="" method="post">
+    {{ form.csrf_token }}
+    <p>请输入未注册的新邮箱：{{ form.new_email }}</p>
+    {% for error in form.new_email.errors%}
+        <p><strong>{{error}}</strong></p>
+    {% endfor %}
+    <p>{{ form.submit }}</p>
+</form>
+<small>提交成功后将给您的新邮箱地址发送验证邮件，请记得查收</small>
 {% endblock %}

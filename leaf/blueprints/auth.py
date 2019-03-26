@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
-from leaf.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm, ChangePasswordForm
+from leaf.forms import RegisterForm, LoginForm, ForgetPasswordForm, ResetPasswordForm, ChangePasswordForm, ChangeEmailForm, ChangeInfoForm
 from leaf.ext import db
 from flask_login import login_user, current_user, logout_user, login_required, fresh_login_required, login_fresh, confirm_login
 from leaf.models import User
 from leaf.utils import redirect_back, generate_token, validate_token, flash_errors
-from leaf.emails import send_confirm_email, send_reset_password_email
+from leaf.emails import send_confirm_email, send_reset_password_email, send_change_email_email
 from leaf.settings import Operations
 
 
@@ -186,10 +186,48 @@ def re_authenticate():
     return render_template("auth/login.html", form=form)
 
 
-# TODO:(lengke)这里还没写
 # 用户主动修改邮箱地址
 @auth.route("/change-email", methods=["Get", "POST"])
 @fresh_login_required
-def change_email():
-    return render_template("auth/change-email.html")
+def change_email_request():
+    form = ChangeEmailForm()
+    if form.validate_on_submit():
+        token = generate_token(user=current_user, operation=Operations.CHANGE_EMAIL, new_email=form.new_email.data.lower())
+        # 向用户邮箱发送带有token的确认邮件
+        send_change_email_email(to=form.email.data, user=current_user, token=token)
+        flash('请进入新邮箱点击确认邮件中的链接', 'info')
+        return redirect(url_for("auth.login"))
+    return render_template("auth/change-email.html", form=form)
 
+
+# 验证用户修改后的邮箱
+@auth.route('/change-email/<token>')
+@login_required
+def change_email(token):
+    if validate_token(user=current_user, token=token, operation=Operations.CHANGE_EMAIL):
+        flash('邮箱修改成功！', 'success')
+        return redirect(url_for('main.index'))
+    else:
+        flash('邮箱验证失败，请重试', 'warning')
+        return redirect(url_for('auth.change_email_request'))
+
+
+# 修改用户其他个人信息
+@auth.route("/change-info", methods=["GET", "POST"])
+@fresh_login_required
+def change_info():
+    form = ChangeInfoForm()
+    if form.validate_on_submit():
+        if form.new_name.data:
+            current_user.name = form.new_name.data
+        if form.new_mobile.data:
+            current_user.mobile = form.new_mobile.data
+        if form.new_department.data:
+            current_user.department = form.new_department.data
+        if form.new_post.data:
+            current_user.post = form.new_post.data
+        db.session.commit()
+        flash("个人资料更新成功", "info")
+        return redirect(url_for("main.index"))
+
+    return render_template("auth/change-info.html", form=form)

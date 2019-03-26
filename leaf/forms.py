@@ -109,3 +109,37 @@ class ChangePasswordForm(FlaskForm):
     new_password = PasswordField("输入新密码", validators=[DataRequired(), Length(6,128), EqualTo('new_password2')])
     new_password2 = PasswordField("确认新密码", validators=[DataRequired()])
     submit = SubmitField("提交")
+
+
+# 登录状态下修改邮箱的表单
+class ChangeEmailForm(FlaskForm):
+    new_email = StringField("新邮箱", validators=[DataRequired(), Email(message="请输入正确的email格式"), Length(1,254)])
+    submit = SubmitField("提交")
+    def validate_new_email(self, field):
+        if User.query.filter_by(email=field.data.lower()).first():
+            raise ValidationError('该邮箱地址已被注册')
+
+
+# 修改其他个人信息的表单
+class ChangeInfoForm(FlaskForm):
+    new_name = StringField("修改真实姓名", validators=[Length(0,30)])
+    new_mobile = StringField("修改手机号", validators=[Length(0,15)])
+    new_department = StringField("修改所属部门", validators=[Length(0,15)])
+    new_post = StringField("修改职位名称", validators=[Length(0,15)])
+    submit = SubmitField("提交")
+
+    # 防止姓名name重复
+    def validate_new_name(self, field):
+        if User.query.filter_by(name=field.data).first():
+            raise ValidationError('该用户名字已被注册')
+
+    # 防止手机号重复
+    def validate_new_mobile(self, field):
+        if User.query.filter_by(mobile=field.data).first():
+            raise ValidationError('该手机号已被注册')
+
+
+
+
+
+
