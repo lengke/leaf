@@ -21,11 +21,12 @@
 </p>
 
 {% if current_user.id == user.id %}
+    <a href="{{ url_for('auth.change_info') }}">修改个人信息</a>
+    <br>
     <a href="{{ url_for('auth.change_password') }}">修改登录密码</a>
     <br>
     <a href="{{ url_for('auth.change_email_request') }}">修改邮箱地址</a>
     <br>
-    <a href="{{ url_for('auth.change_info') }}">修改其他个人信息</a>
 {% endif %}
 
 {% if user.is_confirmed == 0 %}

@@ -83,7 +83,21 @@
             <td>{{ file.author }}</td>
             <td>{{ file.reviewer }} </td>
             <td>{{ moment(file.upload_time).format("lll") }}</td>
-            <td>TODO：文件的操作</td>
+
+            <td>
+                {% if current_user.is_admin or current_user.id == file.its_uploader.id %}
+                <a href="{{ url_for('main.change_file', file_id = file.id) }}">修改简介</a>
+                <br>
+                <a href="">隐藏文件</a>
+                    {% if current_user.is_admin %}
+                        <br>
+                        <a href="">删除文件</a>
+                    {% endif %}
+                {% else %}
+                    只有文件上传人或系统管理员有权操作该文件
+                {% endif %}
+            </td>
+
         </tr>
         {% endfor %}
     </tbody>

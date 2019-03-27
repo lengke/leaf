@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}修改项目{% endblock %}
+{% block content %}
+<p><h6>修改项目简介</h6></p>
+<br>
+
+<form action="" method="post">
+    {{ form.csrf_token }}
+
+    <p>
+        {{ form.new_name.label }} {{ form.new_name }}
+        <small>现为：{{project.name}}</small>
+    </p>
+        {% for error in form.new_name.errors%}
+             <p><strong>{{error}}</strong></p>
+        {% endfor %}
+
+    <p>
+        {{ form.new_description.label }} {{ form.new_description }}
+        <small>现为：{{project.description}}</small>
+    </p>
+
+    <p>
+        {{ form.new_start_time.label }} {{ form.new_start_time }}
+        <small>现为：{{project.start_time}}</small>
+    </p>
+
+    <p>
+        {{ form.new_end_time.label }} {{ form.new_end_time }}
+        <small>现为：{{project.end_time}}</small>
+    </p>
+
+    <p>{{ form.submit }}</p>
+</form>
+<br>
+<p><small>只输入你想修改的某几项信息即可</small></p>
+<p><small>若不想改变某一项信息，在输入框中不输入任何字符</small></p>
+{% endblock %}

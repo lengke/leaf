@@ -23,8 +23,8 @@
                 <td>{{ moment(item.upload_time).format('lll') }}</td>
                 <td>{{ item.its_project.name }}</td>
                 <td>
+                    <a href="{{ url_for('main.change_file', file_id = item.id) }}">修改简介</a><br>
                     <a href="">隐藏文件</a><br>
-                    <a href="">修改简介</a><br>
                     {% if current_user.is_admin %}
                     <a href="">删除文件</a>
                     {% endif %}

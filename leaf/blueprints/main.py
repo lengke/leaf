@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app, send_from_directory
-from leaf.forms import ProjectForm, UploadForm, ChooseMemberForm
+from leaf.forms import ProjectForm, UploadForm, ChooseMemberForm, ChangeProjectForm, ChangeFileForm
 from leaf.ext import db
 from leaf.models import Project, File, User
 from flask_login import login_required, current_user
 from leaf.decorators import confirm_required
 from leaf.utils import redirect_back
-import os, uuid
+import os, uuid, datetime
 
 main = Blueprint("main", __name__)
 
@@ -163,3 +163,50 @@ def add_user(project_id):
         return redirect_back()
 
     return render_template("main/add_user.html", form=form, project=project)
+
+
+# 修改项目简介
+@main.route("/change-project/<project_id>", methods=["GET", "POST"])
+@login_required
+def change_project(project_id):
+    project = Project.query.filter_by(id=project_id).first()
+    form = ChangeProjectForm()
+
+    if form.validate_on_submit():
+        if form.new_name.data:
+            project.name = form.new_name.data
+        if form.new_description.data:
+            project.description = form.new_description.data
+        if form.new_start_time.data:
+            project.start_time = form.new_start_time.data
+        if form.new_end_time.data:
+            project.end_time = form.new_end_time.data
+        db.session.commit()
+        flash("项目简介更新成功", "info")
+        return redirect(url_for('main.show_all_projects'))
+
+    return render_template("main/change-project.html", form=form, project=project)
+
+
+# 修改文件简介
+@main.route("/change-file/<file_id>", methods=["POST", "GET"])
+@login_required
+def change_file(file_id):
+    form = ChangeFileForm()
+    file = File.query.filter_by(id=file_id).first()
+    if form.validate_on_submit():
+        if form.new_origin_filename.data:
+            file.origin_filename = form.new_origin_filename.data
+        if form.new_description.data:
+            file.description = form.new_description.data
+        if form.new_author.data:
+            file.author = form.new_author.data
+        if form.new_reviewer.data:
+            file.reviewer = form.new_reviewer.data
+        db.session.commit()
+        flash("文件信息修改成功", "success")
+        return redirect(url_for('main.my_uploads'))
+
+    return render_template("main/change-file.html", form=form, file=file)
+
+

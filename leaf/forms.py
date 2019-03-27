@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField, BooleanField, SelectMultipleField, DateField
 from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, EqualTo, Length, Email, ValidationError
-from leaf.models import User
+from leaf.models import User, Project, File
 from flask_login import current_user
 
 
@@ -139,7 +139,38 @@ class ChangeInfoForm(FlaskForm):
             raise ValidationError('该手机号已被注册')
 
 
+# 修改项目简介及起止时间的表格
+class ChangeProjectForm(FlaskForm):
 
+    # def __init__(self, project, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.new_start_time.default = project.start_time
+    #     self.new_end_time.default = project.end_time
 
+    new_name = StringField("项目名称：")
+    new_description = TextAreaField("项目描述：")
+
+    #TODO: 新建项目的时候用的DateField，这里用StringField，会有隐患吗？
+    new_start_time = StringField("项目开始日期：")
+    new_end_time = StringField("项目结束日期：")
+    submit = SubmitField("提交")
+
+    # 防止项目名称重复
+    def validate_new_name(self, field):
+        if Project.query.filter_by(name=field.data).first():
+            raise ValidationError('项目名称不能与其他项目重复')
+
+# 修改文件信息的表单
+class ChangeFileForm(FlaskForm):
+    new_origin_filename = StringField("文件名：")
+    new_description = TextAreaField("文件简介：")
+    new_author = StringField("文件作者：")
+    new_reviewer = StringField("文件审核人：")
+    submit = SubmitField('上传')
+
+    # 防止文件名重复
+    def validate_new_origin_filename(self, field):
+        if File.query.filter_by(origin_filename=field.data).first():
+            raise ValidationError('文件名不能与其他文件重复')
 
 

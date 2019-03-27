@@ -42,7 +42,7 @@
 
                 <!--登录用户必须是项目创建人或Admin才有下列2个选项-->
                 {% if current_user.is_admin or current_user.id  == item.its_creator.id %}
-                    <a href="">编辑简介/</a><br>
+                    <a href="{{ url_for('main.change_project', project_id= item.id)}}">编辑简介/</a><br>
                     <a href="">隐藏项目/</a><br>
                 {% endif %}
                 <!--登录用户必须是系统管理员Admin才能删除项目    -->
