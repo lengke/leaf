@@ -17,17 +17,14 @@
         <tbody>
             {% for item in files %}
             <tr>
-                <td>{{ item.origin_filename }}</td>
+                <td><a href="{{ url_for('main.project_detail', project_id=item.its_project.id) }}">{{ item.origin_filename }}</a></td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.file_size | size}}</td>
                 <td>{{ moment(item.upload_time).format('lll') }}</td>
                 <td>{{ item.its_project.name }}</td>
                 <td>
-                    <a href="{{ url_for('main.change_file', file_id = item.id) }}">修改简介</a><br>
-                    <a href="">隐藏文件</a><br>
-                    {% if current_user.is_admin %}
-                    <a href="">删除文件</a>
-                    {% endif %}
+                    <p><a href="{{ url_for('main.change_file', file_id = item.id) }}">修改简介</a></p>
+                    <a href="{{ url_for('main.delete_file', file_id=item.id) }}">删除文件</a>
                 </td>
             </tr>
             {% endfor %}

@@ -35,4 +35,6 @@ def register_exts(app):
     app.add_template_filter(handle_file_size, 'size')
 
 
+#TODO:初始化和生成管理员账号的click方法
+#TODO:生成假账号的测试click方法
 

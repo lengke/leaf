@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, url_for, redirect, abort, flash, request, current_app, send_from_directory
-from leaf.forms import ProjectForm, UploadForm, ChooseMemberForm, ChangeProjectForm, ChangeFileForm
+from leaf.forms import ProjectForm, UploadForm, ChooseMemberForm, ChangeProjectForm, ChangeFileForm, ConfirmDeleteForm
 from leaf.ext import db
 from leaf.models import Project, File, User
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, fresh_login_required
 from leaf.decorators import confirm_required
 from leaf.utils import redirect_back
-import os, uuid, datetime
+import os, uuid
 
 main = Blueprint("main", __name__)
 
@@ -36,7 +36,7 @@ def index():
 @login_required
 @confirm_required
 def show_all_projects():
-    projects = Project.query.all()
+    projects = Project.query.order_by(Project.create_time.desc()).all()
     return render_template("main/show_all_projects.html", projects=projects)
 
 
@@ -208,5 +208,63 @@ def change_file(file_id):
         return redirect(url_for('main.my_uploads'))
 
     return render_template("main/change-file.html", form=form, file=file)
+
+
+# 删除文件
+@main.route("/delete-file/<file_id>", methods=["GET", "POST"])
+@fresh_login_required
+def delete_file(file_id):
+    file = File.query.filter_by(id=file_id).first()
+    form = ConfirmDeleteForm()
+    if form.validate_on_submit():
+        try:
+            os.remove(os.path.join(current_app.config['UPLOAD_PATH'], file.secure_filename))
+            db.session.delete(file)
+            db.session.commit()
+            flash("指定文件已经被删除", "info")
+            return redirect(url_for("main.show_all_projects"))
+        except Exception as e:
+            db.session.delete(file)
+            db.session.commit()
+            flash("文件已从数据库中被删除，但未找到文件本体，请联系网站作者", "warning")
+            return redirect(url_for("main.show_all_projects"))
+
+    return render_template("main/confirm-delete.html", form=form)
+
+
+# 删除项目
+@main.route("/delete-project/<project_id>", methods=["GET", "POST"])
+@fresh_login_required
+def delete_project(project_id):
+    project = Project.query.filter_by(id=project_id).first()
+    form = ConfirmDeleteForm()
+    if form.validate_on_submit():
+        # 删除项目下属的文件本体
+        for each_file in project.its_files:
+            os.remove(os.path.join(current_app.config['UPLOAD_PATH'], each_file.secure_filename))
+        # 直接删除项目
+        db.session.delete(project)
+        db.session.commit()
+        flash("指定项目及其所有文件已经被删除", "info")
+        return redirect(url_for("main.show_all_projects"))
+
+    return render_template("main/confirm-delete.html", form=form)
+
+
+# 删除项目成员
+@main.route("/delete-member/<project_id>/<user_id>", methods=["GET", "POST"])
+@fresh_login_required
+def delete_member(project_id, user_id):
+    project = Project.query.filter_by(id=project_id).first()
+    user = User.query.filter_by(id=user_id).first()
+    form = ConfirmDeleteForm()
+    if form.validate_on_submit():
+        # 直接删除成员
+        project.its_member_users.remove(user)
+        db.session.commit()
+        flash("用户已从项目组中删除", "info")
+        return redirect(url_for("main.show_all_projects"))
+
+    return render_template("main/delete-member.html", form=form)
 
 

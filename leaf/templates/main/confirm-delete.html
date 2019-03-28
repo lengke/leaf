@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}确认删除{% endblock %}
+{% block content %}
+<p><h6>确认删除操作</h6></p>
+<br>
+<p>
+<strong>警告：您正在执行删除操作，文件或项目一旦删除将无法回复。
+    且删除项目将同时删除其所有文件。<br>
+    请在下方输入您的登录密码以完成该敏感操作</strong>
+</p>
+<br>
+<form action="" method="post">
+    {{ form.csrf_token }}
+    <p>
+        {{ form.password.label }} {{ form.password }}
+    </p>
+        {% for error in form.password.errors%}
+             <p><strong>{{error}}</strong></p>
+        {% endfor %}
+    <p>{{ form.submit }}</p>
+</form>
+
+<br>
+
+{% endblock %}

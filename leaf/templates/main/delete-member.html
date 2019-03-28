@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}删除成员{% endblock %}
+{% block content %}
+<p><h6>删除成员</h6></p>
+<br>
+<p>
+<strong>被删除的成员将不再能够操作项目或下载文件。<br>
+    您也可以随时将其重新添加为项目组成员。<br>
+    请在下方输入您的登录密码以完成该敏感操作</strong>
+</p>
+<br>
+<form action="" method="post">
+    {{ form.csrf_token }}
+    <p>
+        {{ form.password.label }} {{ form.password }}
+    </p>
+        {% for error in form.password.errors%}
+             <p><strong>{{error}}</strong></p>
+        {% endfor %}
+    <p>{{ form.submit }}</p>
+</form>
+
+<br>
+
+{% endblock %}

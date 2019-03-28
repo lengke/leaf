@@ -65,9 +65,6 @@ class Project(db.Model):
     start_time = db.Column(db.String(40))
     end_time = db.Column(db.String(40))
 
-    # 项目是否可见
-    is_visable = db.Column(db.Boolean, default=True)
-
     # 与User表关联的外键
     creator_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
@@ -107,9 +104,6 @@ class File(db.Model):
     author = db.Column(db.String(64), nullable=False)
     reviewer = db.Column(db.String(64), nullable=False)
 
-    # 文件是否可见
-    is_visable = db.Column(db.Boolean, default=True)
-
     # 与User和Project表关联的外键
     uploader_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"))
@@ -121,3 +115,4 @@ class File(db.Model):
 
     # 文件的上传者
     its_uploader = db.relationship("User", back_populates="its_upload_files")
+

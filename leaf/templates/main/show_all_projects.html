@@ -3,9 +3,10 @@
 {% block content %}
 <p><h4>项目总览</h4></p>
 
+{% if projects %}
+
 <table border=1 cellpadding="6">
     <thead>
-        <th>ID</th>
         <th>名称</th>
         <th>描述</th>
         <th>创建人</th>
@@ -19,7 +20,6 @@
     <tbody>
         {% for item in projects %}
         <tr>
-            <td>{{ item.id }}</td>
             <td><a href="{{ url_for('main.project_detail', project_id=item.id ) }}">{{ item.name }}</a></td>
             <td>{{ item.description }}</td>
             <td><a href="{{ url_for('admin.profile', user_name=item.its_creator.name ) }}">{{ item.its_creator.name }}</a></td>
@@ -33,21 +33,20 @@
 
                 <!--登录用户必须是项目组成员或Admin才能添加成员    -->
                 {% if current_user.is_admin or current_user in item.its_member_users %}
-                    <a href="{{ url_for('main.upload', project_id=item.id) }}">上传文件/</a><br>
+                    <a href="{{ url_for('main.upload', project_id=item.id) }}">上传新文件/</a><br>
                     <a href="{{ url_for('main.add_user', project_id = item.id )}}">添加成员/</a><br>
                 {% else %}
-                    你还不是项目成员
+                    你不是本项目成员
                 {% endif %}
 
 
                 <!--登录用户必须是项目创建人或Admin才有下列2个选项-->
                 {% if current_user.is_admin or current_user.id  == item.its_creator.id %}
-                    <a href="{{ url_for('main.change_project', project_id= item.id)}}">编辑简介/</a><br>
-                    <a href="">隐藏项目/</a><br>
+                    <a href="{{ url_for('main.change_project', project_id=item.id)}}">修改项目简介</a><br>
                 {% endif %}
                 <!--登录用户必须是系统管理员Admin才能删除项目    -->
                 {% if current_user.is_admin %}
-                <a href="">删除项目</a>
+                <a href="{{ url_for('main.delete_project', project_id=item.id) }}">/删除项目</a>
                 {% endif %}
                 </small>
             </td>
@@ -55,5 +54,9 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% else %}
+<p>空空如也，快去新建一个项目吧！</p>
+{% endif %}
 
 {% endblock %}

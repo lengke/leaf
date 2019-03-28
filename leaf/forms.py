@@ -9,7 +9,7 @@ from flask_login import current_user
 # 创建项目的表单
 class ProjectForm(FlaskForm):
     name = StringField("项目名称：", validators=[DataRequired(message="这项不能为空")])
-    description = TextAreaField("项目描述：", validators=[DataRequired(message="不能为空")])
+    description = TextAreaField("一句话项目概述：", validators=[DataRequired(message="不能为空")])
     start_time = DateField("项目开始日期：", format='%Y-%m-%d', validators=[DataRequired(message="请注意格式要求且不能为空")])
     end_time = DateField("项目结束日期：", format='%Y-%m-%d', validators=[DataRequired(message="请注意格式要求且不能为空")])
     submit = SubmitField("提交")
@@ -173,4 +173,11 @@ class ChangeFileForm(FlaskForm):
         if File.query.filter_by(origin_filename=field.data).first():
             raise ValidationError('文件名不能与其他文件重复')
 
+# 确认文件和项目删除操作的密码验证表
+class ConfirmDeleteForm(FlaskForm):
+    password = PasswordField("输入登录密码：", validators=[DataRequired(message="密码不能为空")])
+    submit = SubmitField("确认删除")
 
+    def validate_password(self, field):
+        if not current_user.validate_password(field.data):
+            raise ValidationError('密码错误')

@@ -18,6 +18,8 @@
     <p>{{ form.submit }}</p>
 </form>
 <p><small>提示：按住ctl键可以多选</small></p>
+
+<a href="{{ url_for('main.project_detail', project_id=project.id) }}">返回项目详情页</a>
 <hr>
 <p><h6> 【{{ project.name }}】 现有成员列表</h6></p>
 

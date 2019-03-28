@@ -2,7 +2,11 @@
 {% block title %}详情{% endblock %}
 {% block content %}
 <p><h6>【{{ project.name }}】 成员列表</h6></p>
-<br>
+    {% if current_user.is_admin or current_user in project.its_member_users %}
+        <p><small><a href="{{ url_for('main.add_user', project_id = project.id )}}">添加成员</a></small></p>
+    {% else %}
+        <p><small>只有本项目成员和系统管理员可以增减成员</small></p>
+    {% endif %}
 <table border="1" cellpadding="12">
     <thead>
         <th>姓名</th>
@@ -46,7 +50,7 @@
             {% elif user.is_admin %}
                 管理员不能被删除
             {% else %}
-            <a href="">删除成员</a>
+            <a href="{{ url_for('main.delete_member', project_id=project.id, user_id=user.id) }}">删除成员</a>
             </small>
             {% endif %}
         </td>
@@ -60,7 +64,12 @@
 
 <hr>
 <p><h6>【{{ project.name }}】 所有文件</h6></p>
-<small>点击文件名即可下载</small>
+{% if current_user.is_admin or current_user in project.its_member_users %}
+            <p><small><a href="{{ url_for('main.upload', project_id=project.id) }}">上传新文件</a></small></p>
+        {% else %}
+            <p><small>只有本项目成员和系统管理员可以上传文件</small></p>
+        {% endif %}
+<p><small>点击下列文件名即可下载</small></p>
 
 <table border=1 cellpadding="8">
     <thead>
@@ -88,11 +97,7 @@
                 {% if current_user.is_admin or current_user.id == file.its_uploader.id %}
                 <a href="{{ url_for('main.change_file', file_id = file.id) }}">修改简介</a>
                 <br>
-                <a href="">隐藏文件</a>
-                    {% if current_user.is_admin %}
-                        <br>
-                        <a href="">删除文件</a>
-                    {% endif %}
+                <a href="{{ url_for('main.delete_file', file_id=file.id) }}">删除文件</a>
                 {% else %}
                     只有文件上传人或系统管理员有权操作该文件
                 {% endif %}
