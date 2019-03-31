@@ -5,17 +5,17 @@
 
 {% if projects %}
 
-<table border=1 cellpadding="6">
-    <thead>
-        <th>名称</th>
-        <th>描述</th>
-        <th>创建人</th>
-        <th>创建时间</th>
-        <th>开始时间</th>
-        <th>结束时间</th>
-        <th>文件数</th>
-        <th>成员数</th>
-        <th>操作</th>
+<table class="table table-bordered table-sm">
+    <thead class="thead-light">
+        <th scope="col">名称</th>
+        <th scope="col">描述</th>
+        <th scope="col">创建人</th>
+        <th scope="col">创建时间</th>
+<!--        <th scope="col">开始时间</th>-->
+<!--        <th scope="col">结束时间</th>-->
+        <th scope="col">文件数</th>
+        <th scope="col">成员数</th>
+        <th scope="col">操作</th>
     </thead>
     <tbody>
         {% for item in projects %}
@@ -24,8 +24,8 @@
             <td>{{ item.description }}</td>
             <td><a href="{{ url_for('admin.profile', user_name=item.its_creator.name ) }}">{{ item.its_creator.name }}</a></td>
             <td>{{ moment(item.create_time).format("ll") }}</td>
-            <td>{{ item.start_time }}</td>
-            <td>{{ item.end_time }}</td>
+<!--            <td>{{ item.start_time }}</td>-->
+<!--            <td>{{ item.end_time }}</td>-->
             <td> {{ item.its_files|count }}</td>
             <td>{{ item.its_member_users | count}}</td>
             <td>

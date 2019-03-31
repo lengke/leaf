@@ -4,36 +4,65 @@
 
 {% block content %}
 
-    <p><h1 class="text-success">欢迎来到LEAF！</h1></p>
-    <h6 class="text-secondary">为跨团队协作而生的项目文档管理系统</h6>
-    <p><h6 class="text-secondary">60秒上手，0遗漏通知，100%好用</h6></p>
 
-<hr>
+<div class="container-fluid my-3">
+  <div class="row">
 
-<p>现有项目共{{projects_sum}}个，现有文件共{{files_sum}}个，注册用户共{{ users_sum }}人。</p>
+    <div class="col-sm-4">
+      <img src="../static/leaf.png" class="img-fluid" alt="Responsive image">
+    </div>
 
-<hr>
-<p>最新动态：</p>
+    <div class="col-sm-8">
+        <p><h1 class="text-success">欢迎来到LEAF！</h1></p>
+        <h6 class="text-secondary">为跨团队协作而生的项目文档管理系统</h6>
+        <p><h6 class="text-secondary">60秒上手，0遗漏通知，100%好用</h6></p>
+    </div>
+
+  </div>
+</div>
+
+<hr class="my-3">
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm">
+      现有项目共  <span class="badge badge-success">{{projects_sum}}</span> 个
+    </div>
+    <div class="col-sm">
+      现有文件共  <span class="badge badge-success">{{files_sum}}</span> 个
+    </div>
+    <div class="col-sm">
+      注册用户共  <span class="badge badge-success">{{ users_sum }}</span> 人
+    </div>
+  </div>
+</div>
+
+<hr class="my-3">
+<div class="container-fluid">
+
+    <p>最新动态：</p>
 {% if latest_project %}
     <p>
-        <strong><a href="{{ url_for('admin.profile', user_name=latest_project.its_creator.name ) }}">{{latest_project.its_creator.name}}</a></strong>
+        <strong><a class="text-primary" href="{{url_for('admin.profile', user_name=latest_project.its_creator.name)}}">{{latest_project.its_creator.name}}</a></strong>
         在 {{moment(latest_project.create_time).format('lll')}}
-        创建了 <strong><a href="{{ url_for('main.project_detail', project_id=latest_project.id ) }}">{{latest_project.name}}</a></strong>
+        创建了 <strong><a class="text-primary" href="{{ url_for('main.project_detail', project_id=latest_project.id ) }}">{{latest_project.name}}</a></strong>
     </p>
 
 {% else %}
-    <p>还没有建立任何项目</p>
+    <p class="text-muted">还没有建立任何项目</p>
 {% endif %}
 
 {% if latest_file %}
     <p>
-        <strong><a href="{{ url_for('admin.profile', user_name=latest_file.its_uploader.name ) }}">{{latest_file.its_uploader.name}}</a></strong>
+        <strong><a class="text-primary" href="{{ url_for('admin.profile', user_name=latest_file.its_uploader.name ) }}">{{latest_file.its_uploader.name}}</a></strong>
         在 {{moment(latest_file.upload_time).format('lll')}}
-        上传了 <strong><a href="{{ url_for('main.project_detail', project_id=latest_file.its_project.id ) }}">{{latest_file.origin_filename}}</a></strong>
+        上传了 <strong><a class="text-primary" href="{{ url_for('main.project_detail', project_id=latest_file.its_project.id ) }}">{{latest_file.origin_filename}}</a></strong>
     </p>
 {% else %}
-    <p>还没有上传任何文件</p>
+    <p class="text-muted">还没有上传任何文件</p>
 {% endif %}
+
+</div>
 
 {% endblock %}
 

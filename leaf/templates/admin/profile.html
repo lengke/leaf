@@ -3,30 +3,42 @@
 {% block title %}{{user.name}}{% endblock %}
 
 {% block content %}
-<p><h5>【基本信息】</h5></p>
-<p>姓名：{{ user.name}}</p>
-<p>邮箱：{{ user.email}}</p>
-<p>手机号码：{{ user.mobile }}</p>
-<p>部门：{{ user.department}}</p>
-<p>职位：{{ user.post}}</p>
-<p>注册时间：{{ moment(user.signup_time).format("LLL") }}</p>
-<p>用户权限：
-    {% if user.is_admin %}
-        系统管理员
-    {% elif user.is_blocked %}
-        被禁用户
-    {% else %}
-        普通用户
-    {% endif %}
-</p>
+
+<div class="container-fluid my-4">
+
+    <p><h5>【基本信息】</h5></p>
+    <p>姓名：{{ user.name}}</p>
+    <p>邮箱：{{ user.email}}</p>
+    <p>手机号码：{{ user.mobile }}</p>
+    <p>部门：{{ user.department}}</p>
+    <p>职位：{{ user.post}}</p>
+    <p>注册时间：{{ moment(user.signup_time).format("LLL") }}</p>
+    <p>用户权限：
+        {% if user.is_admin %}
+            系统管理员
+        {% elif user.is_blocked %}
+            被禁用户
+        {% else %}
+            普通用户
+        {% endif %}
+    </p>
+
+</div>
 
 {% if current_user.id == user.id %}
-    <a href="{{ url_for('auth.change_info') }}">修改个人信息</a>
-    <br>
-    <a href="{{ url_for('auth.change_password') }}">修改登录密码</a>
-    <br>
-    <a href="{{ url_for('auth.change_email_request') }}">修改邮箱地址</a>
-    <br>
+<div class="container-fluid my-4">
+  <div class="row">
+    <div class="col-sm">
+      <a class="btn btn-success" href="{{ url_for('auth.change_info') }}">修改个人信息</a>
+    </div>
+    <div class="col-sm">
+      <a class="btn btn-danger" href="{{ url_for('auth.change_password') }}">修改登录密码</a>
+    </div>
+    <div class="col-sm">
+      <a class="btn btn-warning" href="{{ url_for('auth.change_email_request') }}">修改邮箱地址</a>
+    </div>
+  </div>
+</div>
 {% endif %}
 
 {% if user.is_confirmed == 0 %}
