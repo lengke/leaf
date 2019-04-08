@@ -31,3 +31,13 @@ def send_reset_password_email(user, token):
 
 def send_change_email_email(user, token, to=None):
     send_mail(subject='修改邮箱地址', to=to or user.email, template='emails/change_email', user=user, token=token)
+
+
+# 上传新文件后自动发邮件给项目成员
+# def send_upload_file_email(user, to=None):
+#     send_mail(subject='验证邮箱地址', to=to or user.email, template='emails/confirm', user=user, token=token)
+
+# 添加项目成员后自动发邮件给被添加者
+# def send_add_new_member_email(user, to=None):
+#     send_mail(subject='验证邮箱地址', to=to or user.email, template='emails/confirm', user=user, token=token)
+

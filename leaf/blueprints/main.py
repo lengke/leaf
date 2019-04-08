@@ -61,7 +61,8 @@ def create_project():
         new_project.its_member_users.append(current_user._get_current_object())
         db.session.add(new_project)
         db.session.commit()
-        return redirect(url_for("main.show_all_projects"))
+        # return redirect(url_for("main.show_all_projects"))
+        return redirect( url_for("main.add_user", project_id=new_project.id ) )
     return render_template("main/create_project.html", form=form)
 
 
@@ -118,7 +119,7 @@ def upload(project_id):
             db.session.commit()
 
             flash("文件上传成功", "success")
-            return redirect(url_for("main.show_all_projects"))
+            return redirect(url_for("main.project_detail", project_id=project_id))
 
         return render_template("main/upload.html", form=form, project=project)
     else:

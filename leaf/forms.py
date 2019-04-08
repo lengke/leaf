@@ -150,7 +150,8 @@ class ChangeProjectForm(FlaskForm):
     new_name = StringField("项目名称：")
     new_description = TextAreaField("项目描述：")
 
-    #TODO: 新建项目的时候用的DateField，这里用StringField，会有隐患吗？
+    # TODO: 新建项目的时候用的DateField，这里用StringField，会有隐患吗？
+    # 管他妈的，能用就行
     new_start_time = StringField("项目开始日期：")
     new_end_time = StringField("项目结束日期：")
     submit = SubmitField("提交")
