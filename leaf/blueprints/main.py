@@ -6,6 +6,7 @@ from flask_login import login_required, current_user, fresh_login_required
 from leaf.decorators import confirm_required
 from leaf.utils import redirect_back
 import os, uuid
+from leaf.emails import send_add_new_member_email, send_upload_file_email
 
 main = Blueprint("main", __name__)
 
@@ -118,6 +119,13 @@ def upload(project_id):
             db.session.add(file)
             db.session.commit()
 
+            # 自动将文件上传消息邮件通知给项目组其他成员
+            to_email_list = []
+            for item in project.its_member_users:
+                if item.email != current_user.email:
+                    to_email_list.append(item.email)
+            send_upload_file_email(user=current_user, file=file, to_email_list=to_email_list, to=None)
+
             flash("文件上传成功", "success")
             return redirect(url_for("main.project_detail", project_id=project_id))
 
@@ -156,10 +164,16 @@ def add_user(project_id):
     form = ChooseMemberForm(project=project)
     if form.validate_on_submit():
         choosen_id_list = form.member.data
+        to_email_list = []
         for item in choosen_id_list:
-            user = User.query.filter_by(id = item).first()
+            user = User.query.filter_by(id=item).first()
             project.its_member_users.append(user)
+            to_email_list.append(user.email)
         db.session.commit()
+
+        # 给被添加的新成员发邮件通知
+        send_add_new_member_email(to_email_list=to_email_list, project=project, user=current_user)
+
         flash("添加成员成功", "success")
         return redirect_back()
 

@@ -1,0 +1,6 @@
+<p>{{ user.name }} 已将您添加为项目 “{{ project.name }}” 的成员，</p>
+<p>您有权浏览、上传、下载该项目的所有文件，并可以为项目添加其他新成员。</p>
+<p>点击下方链接可查看该项目详情页(需登录):<br>
+    <a href="{{ url_for('main.project_detail', project_id=project.id, _external=True) }}">{{ url_for('main.project_detail', project_id=project.id, _external=True) }}</a>
+</p>
+<small>(本邮件仅作为自动下发通知用途，并非客服邮箱，请勿回复)</small>

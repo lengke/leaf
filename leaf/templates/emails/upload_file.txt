@@ -1,0 +1,10 @@
+{{ user.name }} 在项目"{{ file.its_project.name }}"中上传了新文件，请知悉：
+文件名： {{ file.origin_filename }}
+文件介绍：{{ file.description }}
+文件作者： {{ file.author }}
+文件审核人： {{ file.reviewer }}
+
+点击链接进入项目详情页可查看该文件(需登录):{{ url_for('main.project_detail', project_id=file.its_project.id, _external=True) }}
+
+
+(本邮件仅作为自动下发通知用途，并非客服邮箱，请勿回复)

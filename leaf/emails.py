@@ -12,7 +12,7 @@ def _send_async_mail(app, message):
 
 
 def send_mail(to, subject, template, **kwargs):
-    message = Message(current_app.config['LEAP_MAIL_SUBJECT_PREFIX'] + subject, recipients=[to])
+    message = Message(current_app.config['LEAP_MAIL_SUBJECT_PREFIX'] + subject, recipients=to)
     message.body = render_template(template + '.txt', **kwargs)
     message.html = render_template(template + '.html', **kwargs)
     app = current_app._get_current_object()
@@ -22,22 +22,32 @@ def send_mail(to, subject, template, **kwargs):
 
 
 def send_confirm_email(user, token, to=None):
-    send_mail(subject='验证邮箱地址', to=to or user.email, template='emails/confirm', user=user, token=token)
+    send_mail(subject='验证邮箱地址', to=to or [user.email], template='emails/confirm', user=user, token=token)
 
 
 def send_reset_password_email(user, token):
-    send_mail(subject='重置密码', to=user.email, template='emails/reset_password', user=user, token=token)
+    send_mail(subject='重置密码', to=[user.email], template='emails/reset_password', user=user, token=token)
 
 
 def send_change_email_email(user, token, to=None):
-    send_mail(subject='修改邮箱地址', to=to or user.email, template='emails/change_email', user=user, token=token)
+    send_mail(subject='修改邮箱地址', to=to or [user.email], template='emails/change_email', user=user, token=token)
 
 
 # 上传新文件后自动发邮件给项目成员
-# def send_upload_file_email(user, to=None):
-#     send_mail(subject='验证邮箱地址', to=to or user.email, template='emails/confirm', user=user, token=token)
+def send_upload_file_email(user, file, to_email_list, to=None):
+    send_mail(subject='新文件上传通知',
+              to=to or to_email_list,
+              template='emails/upload_file',
+              file=file,
+              user=user)
+
 
 # 添加项目成员后自动发邮件给被添加者
-# def send_add_new_member_email(user, to=None):
-#     send_mail(subject='验证邮箱地址', to=to or user.email, template='emails/confirm', user=user, token=token)
+def send_add_new_member_email(user, project, to_email_list, to=None):
+    send_mail(subject='成功加入新项目',
+              to=to or to_email_list,
+              template='emails/add_new_member',
+              project=project,
+              user=user)
+
 
