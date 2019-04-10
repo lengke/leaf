@@ -11,7 +11,7 @@ class Operations:
 
 class BaseConfig():
     SECRET_KEY = os.getenv("SECRET_KEY", "seCRet/Keyyys238823u")
-    LEAP_MAIL_SUBJECT_PREFIX = "【LEAP通知】"
+    LEAP_MAIL_SUBJECT_PREFIX = "【LEAF通知】"
     MAX_CONTENT_LENGTH = 1024 * 1024 * 1024
     UPLOAD_PATH = os.path.join(basedir, 'uploads')
     LEAP_ADMIN_EMAIL = "20167591@qq.com"
