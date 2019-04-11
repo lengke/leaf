@@ -5,16 +5,19 @@
 {% block content %}
 <p><h4>用户登录</h4></p>
 <br>
-    {% for message in form.mobile.errors %}
-        {{ message }}
-    {% endfor %}
-    <br>
+<br>
     <form method="post" action="">
         {{ form.csrf_token }}
-        <p>{{ form.mobile.label }}: {{ form.mobile }}</p>
+        <p>{{ form.mobile.label }}: {{ form.mobile }}
+            {% for error in form.mobile.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </p>
+
         <p>{{ form.password.label }}: {{ form.password }} &nbsp;
             <a href="{{url_for('auth.forget_password')}}"><small>忘记密码</small></a>
         </p>
+
         <p>{{ form.remember.label }} {{ form.remember }}</p>
         <p>{{ form.submit }}</p>
     </form>

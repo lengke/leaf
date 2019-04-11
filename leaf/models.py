@@ -77,7 +77,7 @@ class Project(db.Model):
     # 设置级联操作，当项目被删除则对应的文件也自动删除
     its_files = db.relationship("File", back_populates="its_project", cascade="all")
 
-    #以下为与User表的多对多关系属性：
+    # 以下为与User表的多对多关系属性：
 
     # 项目的所有成员用户
     its_member_users = db.relationship(

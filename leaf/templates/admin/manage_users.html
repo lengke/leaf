@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}用户管理{% endblock %}
+{% block content %}
+<p><h4>用户管理</h4></p>
+<small>
+    <p>您可以在此封禁/解封用户,被封禁的用户将无法登录或使用任何功能</p>
+    <p>点击“封禁”/"解封"即可对指定用户进行相应操作，无需确认，请谨慎</p>
+</small>
+
+
+<table class="table table-bordered table-sm">
+    <thead class="thead-light">
+        <th scope="col">用户名字</th>
+        <th scope="col">所属部门</th>
+        <th scope="col">职位</th>
+        <th scope="col">身份状态</th>
+        <th scope="col">操作</th>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td><a href="{{ url_for('admin.profile', user_name=user.name ) }}">{{ user.name }}</a></td>
+            <td>{{ user.department }}</td>
+            <td> {{ user.post }} </td>
+            <td>
+                {% if user.is_admin%}
+                   系统管理员
+                {% elif user.is_blocked %}
+                    已封禁
+                {% else %}
+                    普通用户
+                {% endif %}
+            </td>
+            <td>
+                {% if user.is_blocked %}
+                <a href="{{ url_for('admin.toggle_block_user', user_name=user.name) }}">解封</a>
+                {% elif user.is_blocked==False and user.is_admin==False %}
+                <a href="{{ url_for('admin.toggle_block_user', user_name=user.name) }}">封禁</a>
+                {% elif user.is_admin %}
+                    不能封禁管理员
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

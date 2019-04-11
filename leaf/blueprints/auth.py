@@ -61,14 +61,19 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(mobile=form.mobile.data).first()
-        if user is not None and user.validate_password(form.password.data):
+        # 判断是否为被封禁用户
+        if user.is_blocked:
+            flash('您的账号已被封禁，请联系管理员', 'warning')
+            return redirect_back()
+        # 没有被封禁则继续判断用户名和密码是否正确
+        elif user is not None and user.validate_password(form.password.data):
             if login_user(user, form.remember.data):
                 flash('登录成功', 'info')
                 return redirect_back()
-            else:
-                flash('账号被锁，请联系管理员', 'warning')
-                return redirect_back()
-        flash('手机号或密码错误', 'warning')
+        elif not user.validate_password(form.password.data):
+            flash('密码错误', 'warning')
+            return render_template("auth/login.html", form=form)
+
     return render_template("auth/login.html", form=form)
 
 

@@ -73,16 +73,7 @@ def create_project():
 @confirm_required
 def my_uploads():
     files = User.query.filter_by(name=current_user.name).first().its_upload_files
-
     return render_template("main/my_uploads.html", files=files)
-
-
-# @我的/提醒我看
-@main.route("/atme")
-@login_required
-@confirm_required
-def atme():
-    return render_template("main/atme.html")
 
 
 # 上传文件
@@ -149,10 +140,16 @@ def project_detail(project_id):
 @login_required
 @confirm_required
 def download(file_id):
+
     file = File.query.filter_by(id=file_id).first()
-    filename = file.secure_filename
-    path = current_app.config['UPLOAD_PATH'] + "/"
-    return send_from_directory(path, filename, attachment_filename=file.origin_filename ,as_attachment=True)
+    # 判断该登录用户是否为项目组成员
+    if current_user in file.its_project.its_member_users or current_user.is_admin:
+        filename = file.secure_filename
+        path = current_app.config['UPLOAD_PATH'] + "/"
+        return send_from_directory(path, filename, attachment_filename=file.origin_filename ,as_attachment=True)
+    else:
+        flash("您还不是项目组成员，无权下载文件", "warning")
+        return redirect(url_for("main.project_detail", project_id=file.its_project.id))
 
 
 # 添加项目成员
