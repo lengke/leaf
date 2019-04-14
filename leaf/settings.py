@@ -14,20 +14,15 @@ class BaseConfig():
     LEAP_MAIL_SUBJECT_PREFIX = "【LEAF通知】"
     MAX_CONTENT_LENGTH = 1024 * 1024 * 1024
     UPLOAD_PATH = os.path.join(basedir, 'uploads')
-    LEAP_ADMIN_EMAIL = "20167591@qq.com"
 
-    CKEDITOR_SERVE_LOCAL = True
-    MAIL_SERVER = "smtp.qq.com"
-    MAIL_SUPPRESS_SEND = False
-    MAIL_PORT = 465
-    MAIL_USE_SSL = True
-    MAIL_USE_TLS = False
-    MAIL_USERNAME = "20167591@qq.com"
-    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = ("20167591@qq.com")
+    MAIL_SERVER = "smtp.sendgrid.net"
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = "apikey"
+    MAIL_PASSWORD = os.getenv("SENDGRID_API_KEY")
+    MAIL_DEFAULT_SENDER = ("noreply@leaf.com")
 
     BOOTSTRAP_SERVE_LOCAL = True
-
 
 
 class DevelopmentConfig(BaseConfig):

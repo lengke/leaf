@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from leaf.settings import config_list
 from leaf.blueprints.main import main
 from leaf.blueprints.auth import auth
@@ -20,6 +20,7 @@ def create_app(config_name=None):
     register_exts(app)
     register_blueprints(app)
     register_commands(app)
+    register_errorhandlers(app)
     return app
 
 
@@ -38,6 +39,14 @@ def register_exts(app):
     app.add_template_filter(handle_file_size, 'size')
 
 
+# 自定义错误页面
+def register_errorhandlers(app):
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('errors/404.html'), 404
+
+
+# 自定义操作命令
 def register_commands(app):
 
     # 初始化数据库并生成1个默认的admin账号
@@ -66,6 +75,7 @@ def register_commands(app):
         db.session.add(default_admin)
         db.session.commit()
         click.echo("已完成全部初始化设置，祝您使用愉快！")
+        click.echo("请登录后立即修改邮箱、手机号和登录密码等信息")
 
     # 创建管理员账号的命令
     @app.cli.command()

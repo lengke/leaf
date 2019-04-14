@@ -18,7 +18,6 @@ def register():
         flash("请先退出登录", "info")
         return redirect(url_for("main.index"))
 
-
     form = RegisterForm()
     if form.validate_on_submit():
         # 如果新用户跟已有用户重名则为其加上部门和职位名以区分
@@ -199,7 +198,7 @@ def change_email_request():
     if form.validate_on_submit():
         token = generate_token(user=current_user, operation=Operations.CHANGE_EMAIL, new_email=form.new_email.data.lower())
         # 向用户邮箱发送带有token的确认邮件
-        send_change_email_email(to=form.email.data, user=current_user, token=token)
+        send_change_email_email(to=form.new_email.data, user=current_user, token=token)
         flash('请进入新邮箱点击确认邮件中的链接', 'info')
         return redirect(url_for("auth.login"))
     return render_template("auth/change-email.html", form=form)

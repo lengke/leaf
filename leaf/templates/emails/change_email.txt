@@ -2,6 +2,6 @@ Hello {{ user.name }},
 
 请点击下方链接来确认你的新邮箱地址:
 
-    {{ url_for('user.change_email', token=token, _external=True) }}
+    {{ url_for('auth.change_email', token=token, _external=True) }}
 
 (本邮件仅作为自动下发通知用途，并非客服邮箱，请勿回复)

@@ -32,22 +32,17 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <div class="navbar-nav mr-auto">
                     {{ render_nav_item('main.index', '首页') }}
+                    &nbsp;&nbsp;&nbsp;
                     {{ render_nav_item('main.show_all_projects', '项目总览') }}
+                    &nbsp;&nbsp;&nbsp;
                     {{ render_nav_item('main.create_project', '新建项目') }}
+                    &nbsp;&nbsp;&nbsp;
                     {{ render_nav_item('main.my_uploads', '我的上传') }}
-
+                    &nbsp;&nbsp;&nbsp;
                     {% if current_user.is_admin %}
                     {{ render_nav_item('admin.manage_users', '用户管理') }}
                     {% endif %}
                     &nbsp;
-                    &nbsp;
-                    <form class="form-inline my-2 my-lg-0" action="">
-                        <input type="text" name="q" class="form-control mr-sm-1" placeholder="项目、文件名或人名"
-                               required>
-                        <button class="btn btn-light my-2 my-sm-0" type="submit">
-                            <span class="oi oi-magnifying-glass"></span>
-                        </button>
-                    </form>
                 </div>
                 <div class="navbar-nav ml-auto">
                     {% if current_user.is_authenticated %}
