@@ -1,7 +1,7 @@
 import os
 
-
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
 
 class Operations:
     CONFIRM = 'confirm'
@@ -31,7 +31,8 @@ class DevelopmentConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    pass
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = os.getenv("DB_URI_PRO")
 
 
 config_list = {

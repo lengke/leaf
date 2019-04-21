@@ -11,7 +11,7 @@ import click
 
 def create_app(config_name=None):
     if config_name is None:
-        current_config = config_list["development"]
+        current_config = config_list["production"]
     else:
         current_config = config_list[config_name]
 
