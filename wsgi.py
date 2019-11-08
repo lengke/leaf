@@ -7,5 +7,5 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 
-app = create_app('production')
+app = create_app('development')
 
